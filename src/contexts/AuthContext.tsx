@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const loadUserProfile = async (userId: string) => {
+  const loadUserProfile = async (userId: string, shouldNavigate = false) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -77,11 +77,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfile(data);
       setLoading(false);
 
-      // Check if user is approved
-      if (!data.aprovado) {
-        navigate('/aguardando-aprovacao');
-      } else {
-        navigate('/rankings');
+      // Only navigate if this is an initial login, not on page refresh
+      if (shouldNavigate) {
+        if (!data.aprovado) {
+          navigate('/aguardando-aprovacao');
+        } else {
+          navigate('/rankings');
+        }
       }
     } catch (err) {
       console.error('Unexpected error loading profile:', err);
@@ -113,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error) return { error };
 
-    // Check if user is approved
+    // Check if user is approved and navigate after successful login
     if (data.user) {
       const { data: profileData } = await supabase
         .from('profiles')
@@ -124,6 +126,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (profileData && !profileData.aprovado) {
         return { error: { message: 'Seu cadastro está aguardando aprovação do administrador.' } };
       }
+      
+      // Navigate to rankings after successful login
+      setTimeout(() => navigate('/rankings'), 100);
     }
 
     return { error };
