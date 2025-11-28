@@ -31,16 +31,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         // Load profile when user logs in
         if (session?.user) {
-          setTimeout(() => {
-            loadUserProfile(session.user.id);
-          }, 0);
+          loadUserProfile(session.user.id);
         } else {
           setProfile(null);
           setLoading(false);
-        }
-
-        if (event === 'SIGNED_IN') {
-          // Don't navigate yet - wait for profile check
         }
       }
     );
@@ -61,25 +55,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [navigate]);
 
   const loadUserProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
 
-    if (error || !data) {
+      if (error) {
+        console.error('Error loading profile:', error);
+        setLoading(false);
+        return;
+      }
+
+      if (!data) {
+        console.error('Profile not found for user:', userId);
+        setLoading(false);
+        return;
+      }
+
+      setProfile(data);
       setLoading(false);
-      return;
-    }
 
-    setProfile(data);
-    setLoading(false);
-
-    // Check if user is approved
-    if (!data.aprovado) {
-      navigate('/aguardando-aprovacao');
-    } else {
-      navigate('/dashboard');
+      // Check if user is approved
+      if (!data.aprovado) {
+        navigate('/aguardando-aprovacao');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      console.error('Unexpected error loading profile:', err);
+      setLoading(false);
     }
   };
 
