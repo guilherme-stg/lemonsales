@@ -71,9 +71,15 @@ export default function Dashboard() {
   const isMaster = userProfile.papel === 'MASTER';
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6 relative overflow-hidden">
+      {/* Animated Background - Behind everything */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
+      </div>
+
       {/* Header */}
-      <header className="max-w-7xl mx-auto mb-8">
+      <header className="max-w-7xl mx-auto mb-8 relative z-10">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
@@ -103,7 +109,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         {/* Player Card */}
         <div className="gaming-border rounded-lg p-8 bg-gradient-card">
           <div className="flex items-start justify-between mb-6">
