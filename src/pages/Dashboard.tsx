@@ -16,9 +16,9 @@ interface Profile {
 }
 
 export default function Dashboard() {
-  const { user, signOut, loading: authLoading } = useAuth();
+  const { user, profile, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [userProfile, setUserProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
 
@@ -29,10 +29,10 @@ export default function Dashboard() {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (user) {
+    if (user && profile) {
       loadProfile();
     }
-  }, [user, retryCount]);
+  }, [user, profile, retryCount]);
 
   const loadProfile = async () => {
     if (!user) return;
@@ -73,7 +73,7 @@ export default function Dashboard() {
       return;
     }
 
-    setProfile(data);
+    setUserProfile(data);
     setLoading(false);
   };
 
@@ -104,7 +104,7 @@ export default function Dashboard() {
     );
   }
 
-  if (!profile) {
+  if (!userProfile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
@@ -119,6 +119,9 @@ export default function Dashboard() {
 
   const xpProgress = getXPProgress();
 
+  // Show link to Solicitações if user is Master
+  const isMaster = userProfile.papel === 'MASTER';
+
   return (
     <div className="min-h-screen bg-background p-6">
       {/* Header */}
@@ -130,14 +133,25 @@ export default function Dashboard() {
             </h1>
             <p className="text-muted-foreground">Arena de Vendas</p>
           </div>
-          <Button
-            onClick={signOut}
-            variant="outline"
-            className="gaming-border"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Sair
-          </Button>
+          <div className="flex gap-2">
+            {isMaster && (
+              <Button
+                onClick={() => navigate('/solicitacoes')}
+                variant="outline"
+                className="gaming-border"
+              >
+                Painel Master
+              </Button>
+            )}
+            <Button
+              onClick={signOut}
+              variant="outline"
+              className="gaming-border"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sair
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -147,13 +161,13 @@ export default function Dashboard() {
           <div className="flex items-start justify-between mb-6">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-1">
-                {profile.nome}
+                {userProfile.nome}
               </h2>
-              <p className="text-muted-foreground">Vendedor</p>
+              <p className="text-muted-foreground capitalize">{userProfile.papel.toLowerCase()}</p>
             </div>
             <div className="text-right">
               <div className="text-4xl font-bold text-primary">
-                {profile.pontos_total}
+                {userProfile.pontos_total}
               </div>
               <div className="text-sm text-muted-foreground">Pontos Totais</div>
             </div>
@@ -162,7 +176,7 @@ export default function Dashboard() {
           <XPBar
             currentXP={xpProgress.current}
             maxXP={xpProgress.max}
-            level={profile.nivel_atual}
+            level={userProfile.nivel_atual}
           />
         </div>
 
@@ -170,7 +184,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
             title="Pontos Hoje"
-            value={profile.pontos_total}
+            value={userProfile.pontos_total}
             icon={Trophy}
             gradient="primary"
           />

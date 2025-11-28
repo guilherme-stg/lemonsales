@@ -311,8 +311,10 @@ export type Database = {
       }
       profiles: {
         Row: {
+          aprovado: boolean | null
           avatar_url: string | null
           created_at: string | null
+          criado_por: string | null
           equipe_id: string | null
           id: string
           nivel_atual: number | null
@@ -324,8 +326,10 @@ export type Database = {
           xp_total: number | null
         }
         Insert: {
+          aprovado?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
+          criado_por?: string | null
           equipe_id?: string | null
           id: string
           nivel_atual?: number | null
@@ -337,8 +341,10 @@ export type Database = {
           xp_total?: number | null
         }
         Update: {
+          aprovado?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
+          criado_por?: string | null
           equipe_id?: string | null
           id?: string
           nivel_atual?: number | null
@@ -350,6 +356,13 @@ export type Database = {
           xp_total?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_criado_por_fkey"
+            columns: ["criado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_equipe_id_fkey"
             columns: ["equipe_id"]
@@ -428,6 +441,51 @@ export type Database = {
           },
           {
             foreignKeyName: "resgates_recompensas_usuario_id_fkey"
+            columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      solicitacoes_cadastro: {
+        Row: {
+          avaliado_por: string | null
+          created_at: string | null
+          id: string
+          mensagem_recusa: string | null
+          status: string | null
+          updated_at: string | null
+          usuario_id: string
+        }
+        Insert: {
+          avaliado_por?: string | null
+          created_at?: string | null
+          id?: string
+          mensagem_recusa?: string | null
+          status?: string | null
+          updated_at?: string | null
+          usuario_id: string
+        }
+        Update: {
+          avaliado_por?: string | null
+          created_at?: string | null
+          id?: string
+          mensagem_recusa?: string | null
+          status?: string | null
+          updated_at?: string | null
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "solicitacoes_cadastro_avaliado_por_fkey"
+            columns: ["avaliado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "solicitacoes_cadastro_usuario_id_fkey"
             columns: ["usuario_id"]
             isOneToOne: false
             referencedRelation: "profiles"
