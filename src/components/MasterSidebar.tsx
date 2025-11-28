@@ -24,7 +24,7 @@ const items = [
 ];
 
 export function MasterSidebar() {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -32,12 +32,11 @@ export function MasterSidebar() {
 
   return (
     <Sidebar
-      className={collapsed ? 'w-14' : 'w-60'}
-      collapsible
+      collapsible="icon"
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? 'hidden' : ''}>
+          <SidebarGroupLabel>
             Painel Master
           </SidebarGroupLabel>
 
@@ -53,7 +52,7 @@ export function MasterSidebar() {
                       activeClassName="bg-gradient-primary text-primary-foreground font-bold"
                     >
                       <item.icon className="h-5 w-5" />
-                      {!collapsed && <span className="ml-2">{item.title}</span>}
+                      <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
