@@ -38,25 +38,30 @@ export default function RegistrarUsuario() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password: Math.random().toString(36).slice(-8),
-      options: {
-        data: {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-user', {
+        body: {
+          email,
+          password: Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8),
           nome,
           papel,
-          criado_por: user!.id
         }
-      }
-    });
+      });
 
-    if (error) {
-      toast.error('Erro ao registrar usuário: ' + error.message);
-    } else {
-      toast.success('Usuário registrado com sucesso!');
-      setNome('');
-      setEmail('');
-      setPapel('VENDEDOR');
+      if (error) {
+        console.error('Error calling function:', error);
+        toast.error('Erro ao registrar usuário: ' + error.message);
+      } else if (data.error) {
+        toast.error('Erro ao registrar usuário: ' + data.error);
+      } else {
+        toast.success('Usuário registrado com sucesso!');
+        setNome('');
+        setEmail('');
+        setPapel('VENDEDOR');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      toast.error('Erro inesperado ao registrar usuário');
     }
 
     setLoading(false);
