@@ -1,4 +1,4 @@
-import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User } from 'lucide-react';
+import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User, Key } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ interface MenuItem {
   url: string;
   icon: any;
   admin?: boolean;
+  masterOnly?: boolean;
 }
 
 const baseItems: MenuItem[] = [
@@ -32,6 +33,7 @@ const baseItems: MenuItem[] = [
 
 const adminItems: MenuItem[] = [
   { title: 'Registrar Usuário', url: '/registrar-usuario', icon: UserPlus, admin: true },
+  { title: 'Alterar Senha', url: '/alterar-senha', icon: Key, admin: true, masterOnly: true },
   { title: 'Solicitações', url: '/solicitacoes', icon: FileText, admin: true },
   { title: 'Gerenciar Metas', url: '/gerenciar-metas', icon: Settings, admin: true },
 ];
@@ -40,8 +42,11 @@ export function AppSidebar() {
   const { profile } = useAuth();
   const { state } = useSidebar();
   const isAdmin = profile?.papel === 'MASTER' || profile?.papel === 'GESTOR';
+  const isMaster = profile?.papel === 'MASTER';
 
-  const allItems = isAdmin ? [...baseItems, ...adminItems] : baseItems;
+  const allItems = isAdmin 
+    ? [...baseItems, ...adminItems.filter(item => !item.masterOnly || isMaster)]
+    : baseItems;
 
   return (
     <Sidebar collapsible="icon">
