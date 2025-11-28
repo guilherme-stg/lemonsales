@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, Medal, Award, TrendingUp } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
@@ -143,6 +143,7 @@ export default function Rankings() {
                             </div>
                             
                             <Avatar className="h-12 w-12 gaming-border">
+                              <AvatarImage src={user.avatar_url || undefined} />
                               <AvatarFallback className="bg-gradient-primary text-primary-foreground font-bold">
                                 {user.nome.substring(0, 2).toUpperCase()}
                               </AvatarFallback>
