@@ -15,6 +15,7 @@ import RegistrarVenda from "./pages/RegistrarVenda";
 import Conquistas from "./pages/Conquistas";
 import Metas from "./pages/Metas";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
+import AlterarSenha from "./pages/AlterarSenha";
 import GerenciarMetas from "./pages/GerenciarMetas";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App: React.FC = () => {
               <Route path="/conquistas" element={<Conquistas />} />
               <Route path="/metas" element={<Metas />} />
               <Route path="/registrar-usuario" element={<RegistrarUsuario />} />
+              <Route path="/alterar-senha" element={<AlterarSenha />} />
               <Route path="/solicitacoes" element={<Solicitacoes />} />
               <Route path="/gerenciar-metas" element={<GerenciarMetas />} />
               <Route path="/perfil" element={<Perfil />} />

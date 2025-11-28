@@ -6,25 +6,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { UserPlus } from 'lucide-react';
+import { Key } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 
-export default function RegistrarUsuario() {
+export default function AlterarSenha() {
   const { user, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [papel, setPapel] = useState<'VENDEDOR' | 'GESTOR'>('VENDEDOR');
+  const [userId, setUserId] = useState('c563a0f3-214c-453b-83fc-5cbefa038e3c');
+  const [newPassword, setNewPassword] = useState('matheus_plagiador');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');
-    } else if (!authLoading && profile && profile.papel !== 'MASTER' && profile.papel !== 'GESTOR') {
+    } else if (!authLoading && profile && profile.papel !== 'MASTER') {
       navigate('/rankings');
     }
   }, [user, profile, authLoading, navigate]);
@@ -32,12 +29,12 @@ export default function RegistrarUsuario() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!nome || !email || !senha) {
+    if (!userId || !newPassword) {
       toast.error('Preencha todos os campos');
       return;
     }
 
-    if (senha.length < 6) {
+    if (newPassword.length < 6) {
       toast.error('A senha deve ter no mínimo 6 caracteres');
       return;
     }
@@ -45,30 +42,37 @@ export default function RegistrarUsuario() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('create-user', {
+      const { data: sessionData } = await supabase.auth.getSession();
+      
+      if (!sessionData.session) {
+        toast.error('Sessão não encontrada');
+        setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('update-user-password', {
         body: {
-          email,
-          password: senha,
-          nome,
-          papel,
+          userId,
+          newPassword,
+        },
+        headers: {
+          Authorization: `Bearer ${sessionData.session.access_token}`,
         }
       });
 
       if (error) {
         console.error('Error calling function:', error);
-        toast.error('Erro ao registrar usuário: ' + error.message);
+        toast.error('Erro ao alterar senha: ' + error.message);
       } else if (data.error) {
-        toast.error('Erro ao registrar usuário: ' + data.error);
+        toast.error('Erro ao alterar senha: ' + data.error);
       } else {
-        toast.success('Usuário registrado com sucesso!');
-        setNome('');
-        setEmail('');
-        setSenha('');
-        setPapel('VENDEDOR');
+        toast.success('Senha alterada com sucesso!');
+        setUserId('');
+        setNewPassword('');
       }
     } catch (err) {
       console.error('Unexpected error:', err);
-      toast.error('Erro inesperado ao registrar usuário');
+      toast.error('Erro inesperado ao alterar senha');
     }
 
     setLoading(false);
@@ -78,7 +82,7 @@ export default function RegistrarUsuario() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse-glow">
-          <UserPlus className="w-16 h-16 text-primary" />
+          <Key className="w-16 h-16 text-primary" />
         </div>
       </div>
     );
@@ -93,7 +97,7 @@ export default function RegistrarUsuario() {
           <header className="h-16 border-b gaming-border flex items-center px-6">
             <SidebarTrigger />
             <h1 className="ml-4 text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Registrar Usuário
+              Alterar Senha de Usuário
             </h1>
           </header>
 
@@ -102,59 +106,34 @@ export default function RegistrarUsuario() {
               <Card className="gaming-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <UserPlus className="w-5 h-5 text-primary" />
-                    Novo Usuário
+                    <Key className="w-5 h-5 text-primary" />
+                    Redefinir Senha (Apenas MASTER)
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="nome">Nome Completo</Label>
+                      <Label htmlFor="userId">ID do Usuário</Label>
                       <Input
-                        id="nome"
+                        id="userId"
                         type="text"
-                        placeholder="Nome do usuário"
-                        value={nome}
-                        onChange={(e) => setNome(e.target.value)}
-                        className="gaming-border"
+                        placeholder="UUID do usuário"
+                        value={userId}
+                        onChange={(e) => setUserId(e.target.value)}
+                        className="gaming-border font-mono text-sm"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="newPassword">Nova Senha</Label>
                       <Input
-                        id="email"
-                        type="email"
-                        placeholder="email@exemplo.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="gaming-border"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="senha">Senha</Label>
-                      <Input
-                        id="senha"
+                        id="newPassword"
                         type="password"
                         placeholder="Mínimo 6 caracteres"
-                        value={senha}
-                        onChange={(e) => setSenha(e.target.value)}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
                         className="gaming-border"
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="papel">Papel</Label>
-                      <Select value={papel} onValueChange={(value: 'VENDEDOR' | 'GESTOR') => setPapel(value)}>
-                        <SelectTrigger className="gaming-border">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="VENDEDOR">Vendedor</SelectItem>
-                          <SelectItem value="GESTOR">Gestor</SelectItem>
-                        </SelectContent>
-                      </Select>
                     </div>
 
                     <Button
@@ -162,7 +141,7 @@ export default function RegistrarUsuario() {
                       className="w-full bg-gradient-primary hover:opacity-90"
                       disabled={loading}
                     >
-                      {loading ? 'Registrando...' : 'Registrar Usuário'}
+                      {loading ? 'Alterando...' : 'Alterar Senha'}
                     </Button>
                   </form>
                 </CardContent>
