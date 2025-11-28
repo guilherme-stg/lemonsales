@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { XPBar } from '@/components/gaming/XPBar';
 import { StatCard } from '@/components/gaming/StatCard';
@@ -19,9 +18,6 @@ interface Profile {
 export default function Dashboard() {
   const { user, profile, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -29,54 +25,8 @@ export default function Dashboard() {
     }
   }, [user, authLoading, navigate]);
 
-  useEffect(() => {
-    if (user && profile) {
-      loadProfile();
-    }
-  }, [user, profile, retryCount]);
-
-  const loadProfile = async () => {
-    if (!user) return;
-
-    setLoading(true);
-
-    // Aguarda um pouco para dar tempo do trigger criar o perfil
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    if (error) {
-      console.error('Error loading profile:', error);
-      toast.error('Erro ao carregar perfil');
-      setLoading(false);
-      return;
-    }
-
-    if (!data && retryCount < 3) {
-      // Se não encontrou o perfil, tenta novamente (pode estar sendo criado)
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-      }, 1000);
-      return;
-    }
-
-    if (!data) {
-      // Após 3 tentativas, mostra erro
-      toast.error('Perfil não encontrado. Tente fazer login novamente.');
-      setTimeout(() => {
-        signOut();
-      }, 2000);
-      setLoading(false);
-      return;
-    }
-
-    setUserProfile(data);
-    setLoading(false);
-  };
+  // Use profile from AuthContext directly - no need to reload
+  const userProfile = profile;
 
   const getXPForLevel = (level: number): number => {
     const xpLevels = [0, 100, 250, 500, 900, 1400, 2000, 2800, 3700, 4800];
@@ -92,7 +42,7 @@ export default function Dashboard() {
     return { current: currentXP, max: maxXP };
   };
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
@@ -109,10 +59,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
-          <p className="text-destructive">Erro ao carregar perfil</p>
-          <Button onClick={() => signOut()}>
-            Voltar ao Login
-          </Button>
+          <p className="text-muted-foreground">Carregando dados...</p>
         </div>
       </div>
     );
