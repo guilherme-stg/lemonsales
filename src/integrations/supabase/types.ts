@@ -390,6 +390,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          apelido: string | null
           aprovado: boolean | null
           avatar_url: string | null
           created_at: string | null
@@ -405,6 +406,7 @@ export type Database = {
           xp_total: number | null
         }
         Insert: {
+          apelido?: string | null
           aprovado?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
@@ -420,6 +422,7 @@ export type Database = {
           xp_total?: number | null
         }
         Update: {
+          apelido?: string | null
           aprovado?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
