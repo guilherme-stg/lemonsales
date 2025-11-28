@@ -10,6 +10,12 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import AguardandoAprovacao from "./pages/AguardandoAprovacao";
 import Solicitacoes from "./pages/Solicitacoes";
+import Rankings from "./pages/Rankings";
+import RegistrarVenda from "./pages/RegistrarVenda";
+import Conquistas from "./pages/Conquistas";
+import Metas from "./pages/Metas";
+import RegistrarUsuario from "./pages/RegistrarUsuario";
+import GerenciarMetas from "./pages/GerenciarMetas";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,7 +33,13 @@ const App: React.FC = () => {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/aguardando-aprovacao" element={<AguardandoAprovacao />} />
+              <Route path="/rankings" element={<Rankings />} />
+              <Route path="/registrar-venda" element={<RegistrarVenda />} />
+              <Route path="/conquistas" element={<Conquistas />} />
+              <Route path="/metas" element={<Metas />} />
+              <Route path="/registrar-usuario" element={<RegistrarUsuario />} />
               <Route path="/solicitacoes" element={<Solicitacoes />} />
+              <Route path="/gerenciar-metas" element={<GerenciarMetas />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

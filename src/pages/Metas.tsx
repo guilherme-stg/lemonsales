@@ -1,0 +1,137 @@
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Target, TrendingUp } from 'lucide-react';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
+
+export default function Metas() {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
+
+  // Mock data - substituir por dados reais do banco
+  const metas = [
+    {
+      id: '1',
+      titulo: 'Meta Mensal',
+      valorAtual: 15000,
+      valorMeta: 50000,
+      periodo: 'Mensal'
+    },
+    {
+      id: '2',
+      titulo: 'Meta Semanal',
+      valorAtual: 5000,
+      valorMeta: 12000,
+      periodo: 'Semanal'
+    }
+  ];
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse-glow">
+          <Target className="w-16 h-16 text-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        
+        <div className="flex-1 flex flex-col">
+          <header className="h-16 border-b gaming-border flex items-center px-6">
+            <SidebarTrigger />
+            <h1 className="ml-4 text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              Acompanhar Metas
+            </h1>
+          </header>
+
+          <main className="flex-1 p-6">
+            <div className="max-w-4xl mx-auto space-y-6">
+              {metas.map((meta) => {
+                const progresso = (meta.valorAtual / meta.valorMeta) * 100;
+                const faltam = meta.valorMeta - meta.valorAtual;
+
+                return (
+                  <Card key={meta.id} className="gaming-border">
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Target className="w-5 h-5 text-primary" />
+                          {meta.titulo}
+                        </div>
+                        <span className="text-sm text-muted-foreground font-normal">
+                          {meta.periodo}
+                        </span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Progresso</span>
+                          <span className="font-bold">{progresso.toFixed(1)}%</span>
+                        </div>
+                        <Progress value={progresso} className="h-4 gaming-border" />
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-4 pt-4 border-t">
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground mb-1">Atual</p>
+                          <p className="text-xl font-bold text-accent">
+                            R$ {meta.valorAtual.toLocaleString('pt-BR')}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground mb-1">Meta</p>
+                          <p className="text-xl font-bold text-primary">
+                            R$ {meta.valorMeta.toLocaleString('pt-BR')}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground mb-1">Faltam</p>
+                          <p className="text-xl font-bold text-secondary">
+                            R$ {faltam.toLocaleString('pt-BR')}
+                          </p>
+                        </div>
+                      </div>
+
+                      {progresso >= 100 && (
+                        <div className="flex items-center gap-2 p-3 bg-accent/10 rounded-lg border border-accent">
+                          <TrendingUp className="w-5 h-5 text-accent" />
+                          <span className="text-sm font-medium text-accent">
+                            Meta atingida! Parabéns! 🎉
+                          </span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+
+              {metas.length === 0 && (
+                <Card className="gaming-border">
+                  <CardContent className="py-12 text-center text-muted-foreground">
+                    <Target className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                    <p>Nenhuma meta definida no momento</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
