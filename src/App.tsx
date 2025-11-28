@@ -17,6 +17,7 @@ import Metas from "./pages/Metas";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
 import AlterarSenha from "./pages/AlterarSenha";
 import GerenciarMetas from "./pages/GerenciarMetas";
+import GerenciarVendas from "./pages/GerenciarVendas";
 import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 
@@ -43,6 +44,7 @@ const App: React.FC = () => {
               <Route path="/alterar-senha" element={<AlterarSenha />} />
               <Route path="/solicitacoes" element={<Solicitacoes />} />
               <Route path="/gerenciar-metas" element={<GerenciarMetas />} />
+              <Route path="/gerenciar-vendas" element={<GerenciarVendas />} />
               <Route path="/perfil" element={<Perfil />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

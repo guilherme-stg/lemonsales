@@ -1,4 +1,4 @@
-import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User, Key } from 'lucide-react';
+import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User, Key, ShoppingCart } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
@@ -36,6 +36,7 @@ const adminItems: MenuItem[] = [
   { title: 'Alterar Senha', url: '/alterar-senha', icon: Key, admin: true, masterOnly: true },
   { title: 'Solicitações', url: '/solicitacoes', icon: FileText, admin: true },
   { title: 'Gerenciar Metas', url: '/gerenciar-metas', icon: Settings, admin: true },
+  { title: 'Gerenciar Vendas', url: '/gerenciar-vendas', icon: ShoppingCart, admin: true },
 ];
 
 export function AppSidebar() {
