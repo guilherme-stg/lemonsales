@@ -78,25 +78,25 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       
-      <SidebarFooter>
+      <SidebarFooter className="p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild size="lg" className="h-auto py-3">
               <NavLink
                 to="/perfil"
-                className="hover:bg-muted/50 gaming-border-secondary"
+                className="hover:bg-muted/50 gaming-border-secondary flex items-center gap-3"
                 activeClassName="bg-gradient-primary text-primary-foreground font-bold"
               >
-                <Avatar className="h-6 w-6">
+                <Avatar className="h-10 w-10">
                   <AvatarImage src={profile?.avatar_url || undefined} />
-                  <AvatarFallback className="text-xs">
+                  <AvatarFallback className="text-base">
                     {profile?.nome.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start gap-0">
-                  <span className="text-sm font-medium">{profile?.nome}</span>
+                <div className="flex flex-col items-start gap-1 flex-1 min-w-0">
+                  <span className="text-sm font-medium truncate w-full">{profile?.nome}</span>
                   {profile?.apelido && state !== 'collapsed' && (
-                    <span className="text-xs text-muted-foreground/60">"{profile.apelido}"</span>
+                    <span className="text-xs text-muted-foreground/70 truncate w-full">{profile.apelido}</span>
                   )}
                 </div>
               </NavLink>
