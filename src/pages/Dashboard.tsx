@@ -22,8 +22,6 @@ export default function Dashboard() {
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');
-    } else if (!authLoading && user) {
-      navigate('/rankings');
     }
   }, [user, authLoading, navigate]);
 
