@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Zap, Trophy, Target, TrendingUp } from "lucide-react";
+import logo from "@/assets/META_SALES.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -24,9 +25,11 @@ const Index = () => {
 
         {/* Title */}
         <div className="space-y-4">
-          <h1 className="text-6xl md:text-8xl font-bold bg-gradient-holographic bg-clip-text text-transparent animate-slide-up">
-            GameSales
-          </h1>
+          <img 
+            src={logo} 
+            alt="META SALES" 
+            className="h-32 md:h-40 mx-auto animate-slide-up"
+          />
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
             Transforme suas vendas em pontos, XP e conquistas épicas
           </p>
