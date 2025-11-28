@@ -27,10 +27,11 @@ export default function Auth() {
     
     if (error) {
       toast.error(error.message);
+      setLoading(false);
     } else {
-      toast.success('Login realizado!');
+      // Don't show success toast - navigation will happen automatically
+      // Toast will be confusing if user is redirected to waiting page
     }
-    setLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
