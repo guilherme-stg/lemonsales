@@ -18,7 +18,7 @@ export function StatCard({ title, value, icon: Icon, gradient = 'primary', subti
   }[gradient];
 
   return (
-    <Card className="gaming-border hover-lift overflow-hidden">
+    <Card className="gaming-border hover-lift overflow-hidden relative">
       <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-50`} />
       <CardContent className="relative p-6">
         <div className="flex items-start justify-between">
