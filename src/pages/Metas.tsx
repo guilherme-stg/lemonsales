@@ -1,15 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Target, TrendingUp } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 
+interface Meta {
+  id: string;
+  titulo: string;
+  valorAtual: number;
+  valorMeta: number;
+  periodo: string;
+}
+
 export default function Metas() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [metas, setMetas] = useState<Meta[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -17,25 +28,87 @@ export default function Metas() {
     }
   }, [user, authLoading, navigate]);
 
-  // Mock data - substituir por dados reais do banco
-  const metas = [
-    {
-      id: '1',
-      titulo: 'Meta Mensal',
-      valorAtual: 15000,
-      valorMeta: 50000,
-      periodo: 'Mensal'
-    },
-    {
-      id: '2',
-      titulo: 'Meta Semanal',
-      valorAtual: 5000,
-      valorMeta: 12000,
-      periodo: 'Semanal'
+  useEffect(() => {
+    if (user && profile) {
+      loadMetas();
     }
-  ];
+  }, [user, profile]);
 
-  if (authLoading) {
+  const loadMetas = async () => {
+    setLoading(true);
+    
+    // Calculate monthly and weekly sales
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+
+    // Get monthly sales
+    const { data: monthData } = await supabase
+      .from('vendas')
+      .select('valor')
+      .eq('usuario_id', user!.id)
+      .eq('status', 'APROVADA')
+      .gte('data_venda', startOfMonth.toISOString());
+
+    // Get weekly sales
+    const { data: weekData } = await supabase
+      .from('vendas')
+      .select('valor')
+      .eq('usuario_id', user!.id)
+      .eq('status', 'APROVADA')
+      .gte('data_venda', startOfWeek.toISOString());
+
+    const monthTotal = monthData?.reduce((sum, v) => sum + Number(v.valor), 0) || 0;
+    const weekTotal = weekData?.reduce((sum, v) => sum + Number(v.valor), 0) || 0;
+
+    setMetas([
+      {
+        id: '1',
+        titulo: 'Meta Mensal',
+        valorAtual: monthTotal,
+        valorMeta: 50000,
+        periodo: 'Mensal'
+      },
+      {
+        id: '2',
+        titulo: 'Meta Semanal',
+        valorAtual: weekTotal,
+        valorMeta: 12000,
+        periodo: 'Semanal'
+      }
+    ]);
+    
+    setLoading(false);
+  };
+
+  // Setup realtime subscription for sales updates
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('metas-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'vendas',
+          filter: `usuario_id=eq.${user.id}`
+        },
+        () => {
+          // Reload metas when new sale is added
+          loadMetas();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse-glow">

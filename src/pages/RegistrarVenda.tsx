@@ -38,6 +38,8 @@ export default function RegistrarVenda() {
     const setup = parseFloat(valorSetup.replace(',', '.'));
     const total = producao + setup;
 
+    const pontos = Math.floor(total / 10);
+
     const { error } = await supabase
       .from('vendas')
       .insert({
@@ -45,8 +47,8 @@ export default function RegistrarVenda() {
         valor: total,
         tipo_venda: 'NOVA',
         cliente: 'Cliente',
-        pontos_base: Math.floor(total / 10),
-        pontos_totais: Math.floor(total / 10),
+        pontos_base: pontos,
+        pontos_totais: pontos,
         status: 'APROVADA'
       });
 
@@ -54,9 +56,12 @@ export default function RegistrarVenda() {
       toast.error('Erro ao registrar venda');
       console.error(error);
     } else {
-      toast.success('Venda registrada com sucesso!');
+      toast.success(`Venda registrada! +${pontos} pontos 🎉`);
       setValorProducao('');
       setValorSetup('');
+      
+      // Redirect to rankings after 1.5 seconds
+      setTimeout(() => navigate('/rankings'), 1500);
     }
 
     setLoading(false);
