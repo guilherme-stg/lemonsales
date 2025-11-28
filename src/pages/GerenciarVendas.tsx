@@ -182,9 +182,7 @@ export default function GerenciarVendas() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <ShoppingCart className="w-16 h-16 text-primary" />
-        </div>
+        <ShoppingCart className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

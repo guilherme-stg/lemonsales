@@ -111,9 +111,7 @@ export default function Conquistas() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Award className="w-16 h-16 text-primary" />
-        </div>
+        <Award className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

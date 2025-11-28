@@ -46,9 +46,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
-          <div className="animate-pulse-glow">
-            <Trophy className="w-16 h-16 text-primary mx-auto" />
-          </div>
+          <Trophy className="w-16 h-16 text-primary mx-auto animate-pulse" />
           <p className="text-muted-foreground">Carregando seu perfil...</p>
         </div>
       </div>

@@ -77,9 +77,7 @@ export default function RegistrarUsuario() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <UserPlus className="w-16 h-16 text-primary" />
-        </div>
+        <UserPlus className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }
