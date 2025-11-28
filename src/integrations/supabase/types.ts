@@ -493,6 +493,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       vendas: {
         Row: {
           cliente: string
@@ -568,8 +589,10 @@ export type Database = {
         Args: { user_id: string }
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
     }
     Enums: {
+      app_role: "MASTER" | "GESTOR" | "VENDEDOR"
       mission_criteria_type: "QUANTIDADE_VENDAS" | "VALOR_REAIS"
       mission_type:
         | "DIARIA_PADRAO"
@@ -708,6 +731,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["MASTER", "GESTOR", "VENDEDOR"],
       mission_criteria_type: ["QUANTIDADE_VENDAS", "VALOR_REAIS"],
       mission_type: [
         "DIARIA_PADRAO",
