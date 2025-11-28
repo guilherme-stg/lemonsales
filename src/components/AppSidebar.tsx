@@ -3,6 +3,7 @@ import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import logoImage from '@/assets/META_SALES.png';
 import {
   Sidebar,
   SidebarContent,
@@ -51,6 +52,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
+      <div className="p-4 flex justify-center border-b border-border">
+        <img src={logoImage} alt="META SALES" className="h-12 w-auto object-contain" />
+      </div>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
