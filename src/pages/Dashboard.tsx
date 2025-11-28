@@ -13,6 +13,7 @@ interface Profile {
   xp_total: number;
   pontos_total: number;
   nivel_atual: number;
+  papel: 'MASTER' | 'GESTOR' | 'VENDEDOR';
 }
 
 export default function Dashboard() {
