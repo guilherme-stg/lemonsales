@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      bonificacoes_meta: {
+        Row: {
+          created_at: string | null
+          descricao: string
+          id: string
+          meta_id: string
+          percentual_meta: number
+          titulo: string
+        }
+        Insert: {
+          created_at?: string | null
+          descricao: string
+          id?: string
+          meta_id: string
+          percentual_meta: number
+          titulo: string
+        }
+        Update: {
+          created_at?: string | null
+          descricao?: string
+          id?: string
+          meta_id?: string
+          percentual_meta?: number
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bonificacoes_meta_meta_id_fkey"
+            columns: ["meta_id"]
+            isOneToOne: false
+            referencedRelation: "metas_equipe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conquistas: {
         Row: {
           codigo_interno: string
@@ -165,6 +200,50 @@ export type Database = {
           {
             foreignKeyName: "eventos_nivel_usuario_id_fkey"
             columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      metas_equipe: {
+        Row: {
+          ativa: boolean | null
+          created_at: string | null
+          criado_por: string | null
+          data_fim: string
+          data_inicio: string
+          id: string
+          periodo: string
+          updated_at: string | null
+          valor_meta_time: number
+        }
+        Insert: {
+          ativa?: boolean | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_fim: string
+          data_inicio: string
+          id?: string
+          periodo: string
+          updated_at?: string | null
+          valor_meta_time: number
+        }
+        Update: {
+          ativa?: boolean | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_fim?: string
+          data_inicio?: string
+          id?: string
+          periodo?: string
+          updated_at?: string | null
+          valor_meta_time?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metas_equipe_criado_por_fkey"
+            columns: ["criado_por"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
