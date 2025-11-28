@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Zap } from 'lucide-react';
+import logoImage from '@/assets/META_SALES.png';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -69,13 +69,8 @@ export default function Auth() {
       <Card className="w-full max-w-md gaming-border relative z-10">
         <CardHeader className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <div className="p-4 rounded-full bg-gradient-primary gaming-border">
-              <Zap className="w-12 h-12 text-white" />
-            </div>
+            <img src={logoImage} alt="META SALES" className="h-20 w-auto object-contain" />
           </div>
-          <CardTitle className="text-4xl font-bold bg-gradient-holographic bg-clip-text text-transparent">
-            GameSales
-          </CardTitle>
           <CardDescription className="text-base">
             Transforme vendas em conquistas épicas
           </CardDescription>
