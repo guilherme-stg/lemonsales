@@ -16,37 +16,65 @@ interface Profile {
 }
 
 export default function Dashboard() {
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       navigate('/auth');
     }
-  }, [user, loading, navigate]);
+  }, [user, authLoading, navigate]);
 
   useEffect(() => {
     if (user) {
       loadProfile();
     }
-  }, [user]);
+  }, [user, retryCount]);
 
   const loadProfile = async () => {
     if (!user) return;
+
+    setLoading(true);
+
+    // Aguarda um pouco para dar tempo do trigger criar o perfil
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
     if (error) {
+      console.error('Error loading profile:', error);
       toast.error('Erro ao carregar perfil');
+      setLoading(false);
+      return;
+    }
+
+    if (!data && retryCount < 3) {
+      // Se não encontrou o perfil, tenta novamente (pode estar sendo criado)
+      setTimeout(() => {
+        setRetryCount(prev => prev + 1);
+      }, 1000);
+      return;
+    }
+
+    if (!data) {
+      // Após 3 tentativas, mostra erro
+      toast.error('Perfil não encontrado. Tente fazer login novamente.');
+      setTimeout(() => {
+        signOut();
+      }, 2000);
+      setLoading(false);
       return;
     }
 
     setProfile(data);
+    setLoading(false);
   };
 
   const getXPForLevel = (level: number): number => {
@@ -63,11 +91,27 @@ export default function Dashboard() {
     return { current: currentXP, max: maxXP };
   };
 
-  if (loading || !profile) {
+  if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Trophy className="w-16 h-16 text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="animate-pulse-glow">
+            <Trophy className="w-16 h-16 text-primary mx-auto" />
+          </div>
+          <p className="text-muted-foreground">Carregando seu perfil...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <p className="text-destructive">Erro ao carregar perfil</p>
+          <Button onClick={() => signOut()}>
+            Voltar ao Login
+          </Button>
         </div>
       </div>
     );
