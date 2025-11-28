@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!data.aprovado) {
         navigate('/aguardando-aprovacao');
       } else {
-        navigate('/dashboard');
+        navigate('/rankings');
       }
     } catch (err) {
       console.error('Unexpected error loading profile:', err);

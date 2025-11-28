@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Check, X, Clock, Users } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { MasterSidebar } from '@/components/MasterSidebar';
+import { AppSidebar } from '@/components/AppSidebar';
 
 interface Solicitacao {
   id: string;
@@ -127,7 +127,7 @@ export default function Solicitacoes() {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <MasterSidebar />
+        <AppSidebar />
         
         <div className="flex-1 flex flex-col">
           <header className="h-16 border-b gaming-border flex items-center px-6">
