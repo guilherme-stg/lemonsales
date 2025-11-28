@@ -36,35 +36,67 @@ export default function Perfil() {
 
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      console.log('Upload iniciado', event.target.files);
       setUploading(true);
       
       if (!event.target.files || event.target.files.length === 0) {
+        console.log('Nenhum arquivo selecionado');
+        toast.error('Nenhum arquivo selecionado');
         return;
       }
 
       const file = event.target.files[0];
+      console.log('Arquivo selecionado:', file.name, file.type, file.size);
+      
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        toast.error('Por favor, selecione uma imagem válida');
+        return;
+      }
+
+      // Validar tamanho (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('A imagem deve ter no máximo 5MB');
+        return;
+      }
+
       const fileExt = file.name.split('.').pop();
-      const filePath = `${user?.id}/${Math.random()}.${fileExt}`;
+      const fileName = `${user?.id}/${Date.now()}.${fileExt}`;
+      console.log('Fazendo upload para:', fileName);
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file, { upsert: true });
+        .upload(fileName, file, { upsert: true });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Erro no upload:', uploadError);
+        throw uploadError;
+      }
 
+      console.log('Upload concluído, obtendo URL pública');
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
+
+      console.log('URL pública:', publicUrl);
 
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: publicUrl })
         .eq('id', user?.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Erro ao atualizar perfil:', updateError);
+        throw updateError;
+      }
 
+      console.log('Perfil atualizado com sucesso');
       toast.success('Foto de perfil atualizada!');
+      
+      // Recarregar a página para mostrar a nova foto
+      window.location.reload();
     } catch (error: any) {
+      console.error('Erro completo:', error);
       toast.error('Erro ao atualizar foto: ' + error.message);
     } finally {
       setUploading(false);
@@ -159,28 +191,26 @@ export default function Perfil() {
                     <AvatarFallback className="text-4xl">{profile.nome.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <Input
-                      id="avatar"
+                    <input
+                      id="avatar-upload"
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/jpg,image/webp"
                       onChange={handleAvatarUpload}
                       disabled={uploading}
                       className="hidden"
                     />
-                    <Label htmlFor="avatar">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={uploading}
-                        onClick={() => document.getElementById('avatar')?.click()}
-                        asChild
-                      >
-                        <span>
-                          <Upload className="mr-2 h-4 w-4" />
-                          {uploading ? 'Enviando...' : 'Alterar Foto'}
-                        </span>
-                      </Button>
-                    </Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={uploading}
+                      onClick={() => {
+                        console.log('Botão clicado');
+                        document.getElementById('avatar-upload')?.click();
+                      }}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {uploading ? 'Enviando...' : 'Alterar Foto'}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
