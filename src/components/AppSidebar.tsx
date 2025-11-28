@@ -52,7 +52,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <div className="p-4 flex justify-center border-b border-border">
+      <div className="h-[73px] flex items-center justify-center border-b border-border px-4">
         <img src={logoImage} alt="META SALES" className="h-12 w-auto object-contain" />
       </div>
       <SidebarContent>
