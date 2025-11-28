@@ -1,7 +1,8 @@
-import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award } from 'lucide-react';
+import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
 
@@ -75,6 +77,33 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <NavLink
+                to="/perfil"
+                className="hover:bg-muted/50 gaming-border-secondary"
+                activeClassName="bg-gradient-primary text-primary-foreground font-bold"
+              >
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={profile?.avatar_url || undefined} />
+                  <AvatarFallback className="text-xs">
+                    {profile?.nome.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col items-start gap-0">
+                  <span className="text-sm font-medium">{profile?.nome}</span>
+                  {profile?.apelido && state !== 'collapsed' && (
+                    <span className="text-xs text-muted-foreground/60">"{profile.apelido}"</span>
+                  )}
+                </div>
+              </NavLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

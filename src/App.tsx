@@ -16,6 +16,7 @@ import Conquistas from "./pages/Conquistas";
 import Metas from "./pages/Metas";
 import RegistrarUsuario from "./pages/RegistrarUsuario";
 import GerenciarMetas from "./pages/GerenciarMetas";
+import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App: React.FC = () => {
               <Route path="/registrar-usuario" element={<RegistrarUsuario />} />
               <Route path="/solicitacoes" element={<Solicitacoes />} />
               <Route path="/gerenciar-metas" element={<GerenciarMetas />} />
+              <Route path="/perfil" element={<Perfil />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
