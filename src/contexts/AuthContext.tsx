@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  profile: any | null;
   signUp: (email: string, password: string, nome: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -26,10 +28,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        setLoading(false);
+        
+        // Load profile when user logs in
+        if (session?.user) {
+          setTimeout(() => {
+            loadUserProfile(session.user.id);
+          }, 0);
+        } else {
+          setProfile(null);
+          setLoading(false);
+        }
 
         if (event === 'SIGNED_IN') {
-          navigate('/dashboard');
+          // Don't navigate yet - wait for profile check
         }
       }
     );
@@ -38,14 +49,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
+      
+      if (session?.user) {
+        loadUserProfile(session.user.id);
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const loadUserProfile = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (error || !data) {
+      setLoading(false);
+      return;
+    }
+
+    setProfile(data);
+    setLoading(false);
+
+    // Check if user is approved
+    if (!data.aprovado) {
+      navigate('/aguardando-aprovacao');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
   const signUp = async (email: string, password: string, nome: string) => {
-    const redirectUrl = `${window.location.origin}/dashboard`;
+    const redirectUrl = `${window.location.origin}/aguardando-aprovacao`;
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -61,10 +100,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    if (error) return { error };
+
+    // Check if user is approved
+    if (data.user) {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('aprovado')
+        .eq('id', data.user.id)
+        .single();
+
+      if (profileData && !profileData.aprovado) {
+        return { error: { message: 'Seu cadastro está aguardando aprovação do administrador.' } };
+      }
+    }
+
     return { error };
   };
 
@@ -74,7 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, signUp, signIn, signOut, loading }}>
+    <AuthContext.Provider value={{ user, session, profile, signUp, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );
