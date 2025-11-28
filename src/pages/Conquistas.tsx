@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import { Award, Lock, Check } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
@@ -33,6 +34,33 @@ export default function Conquistas() {
     if (user) {
       loadConquistas();
     }
+  }, [user]);
+
+  // Setup realtime subscription for achievement unlocks
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('conquistas-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'conquistas_usuarios',
+          filter: `usuario_id=eq.${user.id}`
+        },
+        () => {
+          // Reload achievements when new one is unlocked
+          loadConquistas();
+          toast.success('Nova conquista desbloqueada! 🎉');
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   const loadConquistas = async () => {

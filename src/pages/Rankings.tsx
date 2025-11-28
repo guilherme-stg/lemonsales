@@ -35,6 +35,31 @@ export default function Rankings() {
     }
   }, [user]);
 
+  // Setup realtime subscription for profile updates
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('rankings-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        () => {
+          // Reload rankings when any profile changes
+          loadRankings();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
   const loadRankings = async () => {
     setLoading(true);
     
