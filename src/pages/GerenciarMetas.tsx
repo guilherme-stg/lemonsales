@@ -157,9 +157,7 @@ export default function GerenciarMetas() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Settings className="w-16 h-16 text-primary" />
-        </div>
+        <Settings className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

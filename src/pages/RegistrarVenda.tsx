@@ -70,9 +70,7 @@ export default function RegistrarVenda() {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Plus className="w-16 h-16 text-primary" />
-        </div>
+        <Plus className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

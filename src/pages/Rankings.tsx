@@ -93,9 +93,7 @@ export default function Rankings() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Trophy className="w-16 h-16 text-primary" />
-        </div>
+        <Trophy className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

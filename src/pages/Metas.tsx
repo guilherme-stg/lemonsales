@@ -185,9 +185,7 @@ export default function Metas() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Target className="w-16 h-16 text-primary" />
-        </div>
+        <Target className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }

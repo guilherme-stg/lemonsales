@@ -117,9 +117,7 @@ export default function Solicitacoes() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-glow">
-          <Users className="w-16 h-16 text-primary" />
-        </div>
+        <Users className="w-16 h-16 text-primary animate-pulse" />
       </div>
     );
   }
