@@ -397,7 +397,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           className="relative"
           style={{ 
             animation: 'walk 1s ease-in-out infinite',
-            transform: 'translateY(36px)' // Move down to touch ground
+            transform: 'translateY(86px)' // Move down 86px to touch ground
           }}
         >
           {/* Crown for leader */}
@@ -425,7 +425,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           className="relative"
           style={{ 
             animation: 'walk 1s ease-in-out infinite',
-            transform: 'translateY(36px)' // Move down to touch ground
+            transform: 'translateY(86px)' // Move down 86px to touch ground
           }}
         >
           {/* Crown for leader */}
