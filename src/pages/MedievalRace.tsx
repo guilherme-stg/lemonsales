@@ -392,9 +392,9 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
       {/* Character */}
       {nome.toLowerCase().includes('matheus') ? (
-        // Wizard character - correct total height
+        // Wizard character - same total height as medieval character
         <div 
-          className="relative flex flex-col items-center"
+          className="relative"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
         >
           {/* Crown for leader */}
@@ -404,21 +404,23 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          <img 
-            src={wizardAvatar} 
-            alt={nome}
-            className="object-contain hover:scale-110 transition-transform"
-            style={{
-              width: '48px',
-              height: 'calc(64px + 20px)', // body height + legs height
-              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-            }}
-          />
+          <div className="flex flex-col items-center">
+            {/* Avatar with same height as body + legs (h-16 + h-5 = h-21, md:h-20 + md:h-8 = md:h-28) */}
+            <img 
+              src={wizardAvatar} 
+              alt={nome}
+              className="w-12 md:w-16 object-contain hover:scale-110 transition-transform"
+              style={{
+                height: '84px', // 64px body + 20px legs
+                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+              }}
+            />
+          </div>
         </div>
       ) : nome.toLowerCase().includes('guilherme') ? (
-        // Cat character - correct total height
+        // Cat character - same total height as medieval character
         <div 
-          className="relative flex flex-col items-center"
+          className="relative"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
         >
           {/* Crown for leader */}
@@ -428,16 +430,18 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          <img 
-            src={catAvatar} 
-            alt={nome}
-            className="object-contain hover:scale-110 transition-transform"
-            style={{
-              width: '48px',
-              height: 'calc(64px + 20px)', // body height + legs height
-              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-            }}
-          />
+          <div className="flex flex-col items-center">
+            {/* Avatar with same height as body + legs (h-16 + h-5 = h-21, md:h-20 + md:h-8 = md:h-28) */}
+            <img 
+              src={catAvatar} 
+              alt={nome}
+              className="w-12 md:w-16 object-contain hover:scale-110 transition-transform"
+              style={{
+                height: '84px', // 64px body + 20px legs
+                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+              }}
+            />
+          </div>
         </div>
       ) : (
         // Default medieval character
