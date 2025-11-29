@@ -392,10 +392,13 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
       {/* Character */}
       {nome.toLowerCase().includes('matheus') ? (
-        // Wizard character - 120px total height
+        // Wizard character - 120px total height, moved down
         <div 
           className="relative"
-          style={{ animation: 'walk 1s ease-in-out infinite' }}
+          style={{ 
+            animation: 'walk 1s ease-in-out infinite',
+            transform: 'translateY(36px)' // Move down to touch ground
+          }}
         >
           {/* Crown for leader */}
           {isLeader && (
@@ -417,10 +420,13 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           </div>
         </div>
       ) : nome.toLowerCase().includes('guilherme') ? (
-        // Cat character - 120px total height
+        // Cat character - 120px total height, moved down
         <div 
           className="relative"
-          style={{ animation: 'walk 1s ease-in-out infinite' }}
+          style={{ 
+            animation: 'walk 1s ease-in-out infinite',
+            transform: 'translateY(36px)' // Move down to touch ground
+          }}
         >
           {/* Crown for leader */}
           {isLeader && (
