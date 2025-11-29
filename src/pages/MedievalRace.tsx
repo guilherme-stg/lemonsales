@@ -392,7 +392,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
       {/* Character */}
       {nome.toLowerCase().includes('matheus') ? (
-        // Wizard character - same total height as medieval character
+        // Wizard character - 120px total height
         <div 
           className="relative"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
@@ -405,20 +405,19 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           )}
           
           <div className="flex flex-col items-center">
-            {/* Avatar with same height as body + legs (h-16 + h-5 = h-21, md:h-20 + md:h-8 = md:h-28) */}
             <img 
               src={wizardAvatar} 
               alt={nome}
-              className="w-12 md:w-16 object-contain hover:scale-110 transition-transform"
+              className="w-16 md:w-20 object-contain hover:scale-110 transition-transform"
               style={{
-                height: '84px', // 64px body + 20px legs
+                height: '120px',
                 filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
               }}
             />
           </div>
         </div>
       ) : nome.toLowerCase().includes('guilherme') ? (
-        // Cat character - same total height as medieval character
+        // Cat character - 120px total height
         <div 
           className="relative"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
@@ -431,13 +430,12 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           )}
           
           <div className="flex flex-col items-center">
-            {/* Avatar with same height as body + legs (h-16 + h-5 = h-21, md:h-20 + md:h-8 = md:h-28) */}
             <img 
               src={catAvatar} 
               alt={nome}
-              className="w-12 md:w-16 object-contain hover:scale-110 transition-transform"
+              className="w-16 md:w-20 object-contain hover:scale-110 transition-transform"
               style={{
-                height: '84px', // 64px body + 20px legs
+                height: '120px',
                 filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
               }}
             />
