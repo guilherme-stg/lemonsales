@@ -201,10 +201,7 @@ export default function MedievalRace() {
                 />
               </div>
 
-              {/* Flying Dragon Animation */}
-              <FlyingDragon />
-
-              {/* NO decorative elements - removed pipes and floating blocks */}
+              {/* NO decorative elements - removed pipes, floating blocks and dragon */}
               <div className="hidden" />
             </div>
 
@@ -289,32 +286,6 @@ export default function MedievalRace() {
         @keyframes float-bubble {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-4px); }
-        }
-
-        @keyframes dragon-fly {
-          0% { 
-            transform: translateX(-150px) translateY(0);
-            opacity: 0;
-          }
-          1% {
-            opacity: 1;
-          }
-          13.33% { /* 12s flight across screen out of 90s total = 13.33% of animation */
-            transform: translateX(calc(100vw + 150px)) translateY(0);
-            opacity: 1;
-          }
-          13.34% {
-            opacity: 0;
-          }
-          100% { 
-            transform: translateX(-150px) translateY(0);
-            opacity: 0;
-          }
-        }
-
-        @keyframes dragon-flap {
-          0%, 100% { transform: scaleY(1); }
-          50% { transform: scaleY(0.9); }
         }
 
         @keyframes character-enter {
@@ -489,50 +460,3 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
   );
 }
 
-// Flying Dragon Component - passes every 90 seconds
-function FlyingDragon() {
-  return (
-    <div 
-      className="absolute top-[20%] left-0 z-30 pointer-events-none"
-      style={{ 
-        animation: 'dragon-fly 90s linear infinite', // 90 seconds total cycle
-        animationDelay: '5s', // starts after 5s
-      }}
-    >
-      <div className="relative w-32 h-24 md:w-40 md:h-32">
-        {/* Dragon Body */}
-        <div className="absolute inset-0">
-          {/* Head */}
-          <div className="absolute top-2 right-4 w-12 h-10 md:w-16 md:h-12 bg-gradient-to-br from-[#8b0000] to-[#dc143c] rounded-tr-3xl rounded-br-lg border-2 border-[#5a0000]">
-            {/* Eye */}
-            <div className="absolute top-2 right-2 w-2 h-2 md:w-3 md:h-3 bg-yellow-400 rounded-full animate-pulse" />
-            {/* Horn */}
-            <div className="absolute -top-2 right-3 w-0 h-0 border-l-4 border-r-4 border-b-8 border-transparent border-b-[#5a0000]" />
-          </div>
-          
-          {/* Body */}
-          <div className="absolute top-6 right-12 w-16 h-8 md:w-20 md:h-10 bg-gradient-to-r from-[#dc143c] to-[#8b0000] rounded-l-2xl border-2 border-[#5a0000]" />
-          
-          {/* Wings - animated */}
-          <div 
-            className="absolute top-4 right-16 w-12 h-8 md:w-16 md:h-12 bg-gradient-to-br from-[#ff6b6b]/80 to-[#8b0000]/80 rounded-tl-3xl rounded-bl-lg border border-[#5a0000]"
-            style={{ 
-              animation: 'dragon-flap 0.5s ease-in-out infinite',
-              transformOrigin: 'right center'
-            }}
-          />
-          
-          {/* Tail */}
-          <div className="absolute top-8 left-0 w-16 h-4 md:w-20 md:h-5 bg-gradient-to-l from-[#8b0000] to-transparent rounded-l-full">
-            <div className="absolute -right-2 -top-1 w-0 h-0 border-l-6 border-r-6 border-t-8 border-transparent border-t-[#dc143c]" />
-          </div>
-          
-          {/* Fire Breath */}
-          <div className="absolute top-6 right-1 w-8 h-4 md:w-10 md:h-5">
-            <div className="w-full h-full bg-gradient-to-r from-[#ff4500] via-[#ffa500] to-transparent rounded-r-full opacity-80 animate-pulse" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
