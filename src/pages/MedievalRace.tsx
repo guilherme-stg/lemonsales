@@ -7,6 +7,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { Sword, Shield } from 'lucide-react';
+import wizardAvatar from '@/assets/wizard.png';
 
 interface VendedorRace {
   id: string;
@@ -438,7 +439,13 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           }}
         >
           {/* Avatar or Icon */}
-          {avatarUrl ? (
+          {nome.toLowerCase().includes('matheus') ? (
+            <img 
+              src={wizardAvatar} 
+              alt={nome}
+              className="w-8 h-8 md:w-12 md:h-12 object-contain"
+            />
+          ) : avatarUrl ? (
             <img 
               src={avatarUrl} 
               alt={nome}
