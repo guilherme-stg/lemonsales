@@ -392,7 +392,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
       {/* Character */}
       {nome.toLowerCase().includes('matheus') ? (
-        // Wizard character - padronized height
+        // Wizard character - correct total height
         <div 
           className="relative flex flex-col items-center"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
@@ -404,22 +404,19 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          {/* Main avatar container with same total height as medieval character */}
-          <div className="flex flex-col items-center">
-            <img 
-              src={wizardAvatar} 
-              alt={nome}
-              className="w-12 h-16 md:w-16 md:h-20 object-contain hover:scale-110 transition-transform"
-              style={{
-                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-              }}
-            />
-            {/* Spacer for legs equivalent */}
-            <div className="h-5 md:h-8" />
-          </div>
+          <img 
+            src={wizardAvatar} 
+            alt={nome}
+            className="object-contain hover:scale-110 transition-transform"
+            style={{
+              width: '48px',
+              height: 'calc(64px + 20px)', // body height + legs height
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+            }}
+          />
         </div>
       ) : nome.toLowerCase().includes('guilherme') ? (
-        // Cat character - padronized height
+        // Cat character - correct total height
         <div 
           className="relative flex flex-col items-center"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
@@ -431,19 +428,16 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          {/* Main avatar container with same total height as medieval character */}
-          <div className="flex flex-col items-center">
-            <img 
-              src={catAvatar} 
-              alt={nome}
-              className="w-12 h-16 md:w-16 md:h-20 object-contain hover:scale-110 transition-transform"
-              style={{
-                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-              }}
-            />
-            {/* Spacer for legs equivalent */}
-            <div className="h-5 md:h-8" />
-          </div>
+          <img 
+            src={catAvatar} 
+            alt={nome}
+            className="object-contain hover:scale-110 transition-transform"
+            style={{
+              width: '48px',
+              height: 'calc(64px + 20px)', // body height + legs height
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+            }}
+          />
         </div>
       ) : (
         // Default medieval character
