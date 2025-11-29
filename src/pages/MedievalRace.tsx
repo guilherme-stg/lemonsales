@@ -6,7 +6,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { Sword, Shield, Flame } from 'lucide-react';
+import { Sword, Shield } from 'lucide-react';
 
 interface VendedorRace {
   id: string;
@@ -140,55 +140,58 @@ export default function MedievalRace() {
             </div>
           </div>
 
-          {/* Medieval Scene Container */}
+          {/* Super Mario Style Scene Container */}
           <div className="flex-1 relative overflow-hidden">
             {/* Parallax Background Layers */}
             <div className="absolute inset-0">
-              {/* Sky Layer with stars */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#3a2a4a] via-[#5a3a5a] to-[#2a1810]">
-                {/* Subtle stars */}
-                <div className="absolute inset-0 opacity-30" style={{
-                  backgroundImage: `radial-gradient(2px 2px at 20% 30%, white, transparent),
-                                   radial-gradient(2px 2px at 60% 70%, white, transparent),
-                                   radial-gradient(1px 1px at 50% 50%, white, transparent),
-                                   radial-gradient(1px 1px at 80% 10%, white, transparent),
-                                   radial-gradient(2px 2px at 90% 60%, white, transparent)`,
-                  backgroundSize: '200px 200px'
-                }} />
-              </div>
+              {/* Sky Layer - Mario Blue */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#5c94fc] to-[#6ba7ff]" />
               
-              {/* Mountains/Castles Far */}
-              <div className="absolute bottom-0 left-0 right-0 h-48 md:h-64 overflow-hidden">
-                <div className="absolute inset-0 medieval-far-scroll" 
+              {/* Clouds Far Layer */}
+              <div className="absolute top-0 left-0 right-0 h-full overflow-hidden">
+                <div className="absolute inset-0 mario-clouds-scroll" 
                      style={{ 
-                       width: '200%',
-                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 200'%3E%3Cpath fill='%231a0a1a' opacity='0.6' d='M0,200 L0,150 L100,120 L150,140 L200,100 L300,130 L400,90 L500,120 L600,100 L700,130 L800,110 L900,125 L1000,95 L1100,115 L1200,105 L1300,120 L1400,100 L1500,125 L1600,110 L1600,200 Z'/%3E%3C/svg%3E")`,
+                       width: '300%',
+                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2400 400'%3E%3Cellipse cx='200' cy='80' rx='60' ry='40' fill='white'/%3E%3Cellipse cx='150' cy='95' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='250' cy='95' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='700' cy='120' rx='60' ry='40' fill='white'/%3E%3Cellipse cx='650' cy='135' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='750' cy='135' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='1200' cy='90' rx='60' ry='40' fill='white'/%3E%3Cellipse cx='1150' cy='105' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='1250' cy='105' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='1700' cy='110' rx='60' ry='40' fill='white'/%3E%3Cellipse cx='1650' cy='125' rx='50' ry='35' fill='white'/%3E%3Cellipse cx='1750' cy='125' rx='50' ry='35' fill='white'/%3E%3C/svg%3E")`,
                        backgroundRepeat: 'repeat-x',
-                       backgroundSize: '1600px 200px',
-                       backgroundPosition: 'bottom'
+                       backgroundSize: '2400px 400px',
+                       backgroundPosition: 'top'
                      }} 
                 />
               </div>
 
-              {/* Trees/Walls Middle */}
-              <div className="absolute bottom-0 left-0 right-0 h-36 md:h-48 overflow-hidden">
-                <div className="absolute inset-0 medieval-mid-scroll"
+              {/* Hills/Mountains Middle Layer */}
+              <div className="absolute bottom-32 left-0 right-0 h-40 md:h-56 overflow-hidden">
+                <div className="absolute inset-0 mario-hills-scroll" 
                      style={{
                        width: '200%',
-                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150'%3E%3Cpath fill='%232a1a1a' opacity='0.8' d='M0,150 L0,100 L50,80 L100,110 L150,70 L200,100 L250,60 L300,90 L350,80 L400,100 L450,70 L500,95 L550,85 L600,100 L650,75 L700,105 L750,80 L800,95 L850,70 L900,100 L950,85 L1000,95 L1050,80 L1100,100 L1200,90 L1200,150 Z'/%3E%3C/svg%3E")`,
+                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 200'%3E%3Cellipse cx='200' cy='150' rx='150' ry='80' fill='%2354b648'/%3E%3Cellipse cx='150' cy='170' rx='120' ry='60' fill='%2354b648'/%3E%3Cellipse cx='250' cy='170' rx='120' ry='60' fill='%2354b648'/%3E%3Cellipse cx='600' cy='140' rx='160' ry='85' fill='%2354b648'/%3E%3Cellipse cx='550' cy='165' rx='130' ry='65' fill='%2354b648'/%3E%3Cellipse cx='650' cy='165' rx='130' ry='65' fill='%2354b648'/%3E%3Cellipse cx='1000' cy='145' rx='155' ry='82' fill='%2354b648'/%3E%3Cellipse cx='950' cy='168' rx='125' ry='62' fill='%2354b648'/%3E%3Cellipse cx='1050' cy='168' rx='125' ry='62' fill='%2354b648'/%3E%3Cellipse cx='1400' cy='150' rx='150' ry='80' fill='%2354b648'/%3E%3Cellipse cx='1350' cy='170' rx='120' ry='60' fill='%2354b648'/%3E%3Cellipse cx='1450' cy='170' rx='120' ry='60' fill='%2354b648'/%3E%3C/svg%3E")`,
                        backgroundRepeat: 'repeat-x',
-                       backgroundSize: '1200px 150px',
+                       backgroundSize: '1600px 200px',
                        backgroundPosition: 'bottom'
                      }}
                 />
               </div>
 
-              {/* Ground Layer */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 overflow-hidden">
-                <div className="absolute inset-0 medieval-near-scroll" 
+              {/* Bushes Near Layer */}
+              <div className="absolute bottom-24 left-0 right-0 h-20 md:h-28 overflow-hidden">
+                <div className="absolute inset-0 mario-bushes-scroll"
                      style={{
                        width: '200%',
-                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Crect fill='%233a2a1a' width='800' height='80'/%3E%3Cpath fill='%232a1a0a' d='M0,20 Q100,10 200,20 T400,20 T600,20 T800,20 L800,80 L0,80 Z'/%3E%3C/svg%3E")`,
+                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100'%3E%3Cellipse cx='100' cy='70' rx='50' ry='30' fill='%2343a047'/%3E%3Cellipse cx='60' cy='80' rx='40' ry='25' fill='%2343a047'/%3E%3Cellipse cx='140' cy='80' rx='40' ry='25' fill='%2343a047'/%3E%3Cellipse cx='400' cy='65' rx='55' ry='32' fill='%2343a047'/%3E%3Cellipse cx='355' cy='77' rx='45' ry='27' fill='%2343a047'/%3E%3Cellipse cx='445' cy='77' rx='45' ry='27' fill='%2343a047'/%3E%3Cellipse cx='700' cy='68' rx='52' ry='31' fill='%2343a047'/%3E%3Cellipse cx='658' cy='79' rx='42' ry='26' fill='%2343a047'/%3E%3Cellipse cx='742' cy='79' rx='42' ry='26' fill='%2343a047'/%3E%3Cellipse cx='1000' cy='70' rx='50' ry='30' fill='%2343a047'/%3E%3Cellipse cx='960' cy='80' rx='40' ry='25' fill='%2343a047'/%3E%3Cellipse cx='1040' cy='80' rx='40' ry='25' fill='%2343a047'/%3E%3C/svg%3E")`,
+                       backgroundRepeat: 'repeat-x',
+                       backgroundSize: '1200px 100px',
+                       backgroundPosition: 'bottom'
+                     }}
+                />
+              </div>
+
+              {/* Ground/Floor Layer - Mario Green */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 overflow-hidden">
+                <div className="absolute inset-0 mario-ground-scroll" 
+                     style={{
+                       width: '200%',
+                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Crect fill='%237cc576' width='800' height='60'/%3E%3Crect fill='%23c09050' y='60' width='800' height='20'/%3E%3C/svg%3E")`,
                        backgroundRepeat: 'repeat-x',
                        backgroundSize: '800px 80px',
                        backgroundPosition: 'bottom'
@@ -196,7 +199,7 @@ export default function MedievalRace() {
                 />
               </div>
 
-              {/* Decorative Elements */}
+              {/* Decorative Elements - Mario Style */}
               <DecorativeElements />
             </div>
 
@@ -219,15 +222,15 @@ export default function MedievalRace() {
                 </div>
               </div>
             ) : (
-              /* Characters Layer */
-              <div className="absolute inset-0 flex items-end pb-24 md:pb-32 z-10">
-                <div className="relative w-full h-48 md:h-64">
+              /* Characters Layer - FIXED: Now anchored to ground */
+              <div className="absolute bottom-24 md:bottom-32 left-0 right-0 h-32 md:h-40 z-10">
+                <div className="relative w-full h-full">
                   {vendedores.map((vendedor, index) => {
                     const progresso = maxFaturamento > 0 ? vendedor.faturamentoMensal / maxFaturamento : 0;
                     const posX = 10 + progresso * 70; // 10% a 80% da largura
                     const isLeader = index === 0;
-                    // Offset vertical para evitar sobreposição
-                    const verticalOffset = (index % 3) * 12;
+                    // Offset vertical para evitar sobreposição (menor)
+                    const verticalOffset = (index % 3) * 8;
                     
                     return (
                       <CharacterWithBubble
@@ -260,7 +263,7 @@ export default function MedievalRace() {
       <style>{`
         @keyframes scroll-parallax-far {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.33%); }
         }
         
         @keyframes scroll-parallax-mid {
@@ -283,11 +286,9 @@ export default function MedievalRace() {
           50% { transform: translateY(-4px); }
         }
 
-        @keyframes torch-flicker {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          25% { opacity: 0.8; transform: scale(1.05); }
-          50% { opacity: 1; transform: scale(0.95); }
-          75% { opacity: 0.9; transform: scale(1.02); }
+        @keyframes pipe-breathe {
+          0%, 100% { transform: scaleY(1); }
+          50% { transform: scaleY(1.02); }
         }
 
         @keyframes character-enter {
@@ -301,16 +302,21 @@ export default function MedievalRace() {
           }
         }
         
-        .medieval-far-scroll {
-          animation: scroll-parallax-far 120s linear infinite;
+        /* Mario Style Animations - 3x FASTER */
+        .mario-clouds-scroll {
+          animation: scroll-parallax-far 40s linear infinite;
         }
         
-        .medieval-mid-scroll {
-          animation: scroll-parallax-mid 80s linear infinite;
+        .mario-hills-scroll {
+          animation: scroll-parallax-mid 25s linear infinite;
         }
         
-        .medieval-near-scroll {
-          animation: scroll-parallax-near 50s linear infinite;
+        .mario-bushes-scroll {
+          animation: scroll-parallax-near 18s linear infinite;
+        }
+        
+        .mario-ground-scroll {
+          animation: scroll-parallax-near 15s linear infinite;
         }
         
         .medieval-title {
@@ -432,47 +438,75 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
   );
 }
 
-// Decorative medieval elements
+// Decorative Mario-style elements
 function DecorativeElements() {
   return (
     <>
-      {/* Torches */}
-      <div className="absolute bottom-32 left-[5%] hidden md:block z-5">
-        <Torch />
+      {/* Mario Pipes */}
+      <div className="absolute bottom-24 left-[8%] hidden md:block z-5">
+        <MarioPipe />
       </div>
-      <div className="absolute bottom-32 left-[25%] hidden lg:block z-5">
-        <Torch delay={0.5} />
-      </div>
-      <div className="absolute bottom-32 right-[25%] hidden lg:block z-5">
-        <Torch delay={1} />
-      </div>
-      <div className="absolute bottom-32 right-[5%] hidden md:block z-5">
-        <Torch delay={1.5} />
+      <div className="absolute bottom-24 right-[12%] hidden lg:block z-5">
+        <MarioPipe />
       </div>
 
-      {/* Barrels and Rocks */}
-      <div className="absolute bottom-24 left-[15%] w-6 h-8 md:w-8 md:h-10 bg-[#4b2810] border-2 border-[#2a1810] rounded-sm hidden md:block" />
-      <div className="absolute bottom-24 right-[15%] w-8 h-6 md:w-10 md:h-8 bg-[#5a5a5a] border-2 border-[#3a3a3a] rounded-lg hidden md:block" />
-      <div className="absolute bottom-24 left-[45%] w-5 h-5 md:w-6 md:h-6 bg-[#6a6a6a] border-2 border-[#4a4a4a] rounded-full hidden lg:block" />
+      {/* Question Blocks */}
+      <div className="absolute bottom-48 left-[20%] hidden lg:block">
+        <QuestionBlock />
+      </div>
+      <div className="absolute bottom-56 left-[35%] hidden lg:block">
+        <QuestionBlock delay={0.3} />
+      </div>
+      <div className="absolute bottom-48 right-[30%] hidden lg:block">
+        <QuestionBlock delay={0.6} />
+      </div>
+
+      {/* Brick Blocks */}
+      <div className="absolute bottom-40 left-[50%] w-8 h-8 md:w-10 md:h-10 bg-[#d4824a] border-2 border-[#a0522d] hidden md:block" style={{
+        backgroundImage: `linear-gradient(90deg, #d4824a 0%, #c87345 50%, #d4824a 100%)`,
+        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.2)'
+      }} />
+      <div className="absolute bottom-52 right-[40%] w-8 h-8 md:w-10 md:h-10 bg-[#d4824a] border-2 border-[#a0522d] hidden lg:block" style={{
+        backgroundImage: `linear-gradient(90deg, #d4824a 0%, #c87345 50%, #d4824a 100%)`,
+        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.2)'
+      }} />
     </>
   );
 }
 
-function Torch({ delay = 0 }: { delay?: number }) {
+function MarioPipe() {
   return (
-    <div className="relative">
-      {/* Torch post */}
-      <div className="w-2 md:w-3 h-16 md:h-20 bg-[#4b2810] border border-[#2a1810] md:border-2 mx-auto" />
-      {/* Flame */}
-      <div 
-        className="absolute -top-2 left-1/2 -translate-x-1/2"
-        style={{ 
-          animation: 'torch-flicker 2s ease-in-out infinite',
-          animationDelay: `${delay}s`
-        }}
-      >
-        <Flame className="w-4 h-5 md:w-6 md:h-8 text-orange-500" />
-        <div className="absolute inset-0 blur-md bg-orange-400/40 rounded-full" />
+    <div className="relative" style={{ animation: 'pipe-breathe 3s ease-in-out infinite' }}>
+      {/* Pipe top rim */}
+      <div className="w-12 md:w-16 h-3 md:h-4 bg-[#4caf50] border-2 border-[#2e7d32] rounded-t-lg mb-[-2px] relative z-10" style={{
+        boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.3)'
+      }} />
+      {/* Pipe body */}
+      <div className="w-10 md:w-14 h-12 md:h-16 bg-[#66bb6a] border-2 border-[#2e7d32] mx-auto relative" style={{
+        borderTop: 'none',
+        boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.3), inset 2px 0 4px rgba(255,255,255,0.2)'
+      }}>
+        {/* Pipe highlight */}
+        <div className="absolute left-1 top-0 w-1 md:w-2 h-full bg-white/20" />
+      </div>
+    </div>
+  );
+}
+
+function QuestionBlock({ delay = 0 }: { delay?: number }) {
+  return (
+    <div 
+      className="relative w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-[#f4d03f] to-[#f39c12] border-2 border-[#d68910] animate-bounce"
+      style={{
+        animationDelay: `${delay}s`,
+        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.2)'
+      }}
+    >
+      {/* Question mark */}
+      <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg md:text-xl" style={{
+        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+      }}>
+        ?
       </div>
     </div>
   );
