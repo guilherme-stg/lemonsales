@@ -27,7 +27,7 @@ interface MenuItem {
 
 const baseItems: MenuItem[] = [
   { title: 'Rankings', url: '/rankings', icon: Trophy },
-  { title: 'Corrida Medieval', url: '/medieval-race', icon: Swords },
+  { title: 'Corrida', url: '/medieval-race', icon: Swords },
   { title: 'Registrar Venda', url: '/registrar-venda', icon: Plus },
   { title: 'Minhas Conquistas', url: '/conquistas', icon: Award },
   { title: 'Acompanhar Metas', url: '/metas', icon: Target },
