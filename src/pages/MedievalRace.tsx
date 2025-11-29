@@ -431,7 +431,8 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             alt={nome}
             className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
             style={{
-              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined,
+              transform: 'translateY(2px)' // Ajuste para alinhar com o chão
             }}
           />
         </div>
