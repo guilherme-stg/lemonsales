@@ -169,12 +169,12 @@ export default function MedievalRace() {
               </div>
 
               {/* Ground/Floor Layer - Aligned with black line */}
-              <div className="absolute bottom-0 left-0 right-0 h-40 md:h-48 overflow-hidden border-t-4 border-[#000]">
+              <div className="absolute bottom-0 left-0 right-0 h-[640px] md:h-[672px] overflow-hidden border-t-4 border-[#000]">
                 {/* Dirt blocks - starts immediately from top (after border) */}
                 <div className="absolute inset-0 mario-ground-scroll" style={{
                 width: '200%',
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Cdefs%3E%3Cpattern id='dirt-block' x='0' y='0' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Crect fill='%23c09050' width='40' height='40'/%3E%3Crect fill='%23a0703a' x='1' y='1' width='38' height='38'/%3E%3Ccircle fill='%238b5a2b' cx='10' cy='10' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='25' cy='15' r='1.5'/%3E%3Ccircle fill='%238b5a2b' cx='15' cy='28' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='30' cy='30' r='1.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23dirt-block)' width='800' height='80'/%3E%3C/svg%3E")`,
-                backgroundRepeat: 'repeat-x',
+                backgroundRepeat: 'repeat',
                 backgroundSize: '800px 80px',
                 backgroundPosition: 'top'
               }} />
