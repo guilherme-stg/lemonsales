@@ -370,8 +370,8 @@ function CharacterWithBubble({
             </div>}
           
           <div className="flex flex-col items-center">
-            <img src={wizardAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
+            <img src={wizardAvatar} alt={nome} className="w-64 md:w-80 object-contain hover:scale-110 transition-transform" style={{
+          height: '500px',
           filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
         }} />
           </div>
@@ -387,8 +387,8 @@ function CharacterWithBubble({
             </div>}
           
           <div className="flex flex-col items-center">
-            <img src={catAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
+            <img src={catAvatar} alt={nome} className="w-64 md:w-80 object-contain hover:scale-110 transition-transform" style={{
+          height: '500px',
           filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
         }} />
           </div>
@@ -403,22 +403,22 @@ function CharacterWithBubble({
             </div>}
           
           {/* Character body */}
-          <div className="w-12 h-16 md:w-16 md:h-20 rounded-t-full border-2 md:border-4 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110" style={{
+          <div className="w-48 h-64 md:w-64 md:h-80 rounded-t-full border-8 md:border-12 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110" style={{
         backgroundColor: characterColor,
         boxShadow: isLeader ? '0 0 20px rgba(212, 175, 55, 0.6)' : undefined
       }}>
             {/* Avatar or Icon */}
-            {avatarUrl ? <img src={avatarUrl} alt={nome} className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover" /> : <div className="text-xl md:text-3xl">{characterIcon}</div>}
+            {avatarUrl ? <img src={avatarUrl} alt={nome} className="w-32 h-32 md:w-48 md:h-48 rounded-full object-cover" /> : <div className="text-8xl md:text-9xl">{characterIcon}</div>}
             
             {/* Arms */}
-            <div className="absolute -left-2 md:-left-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
-            <div className="absolute -right-2 md:-right-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
+            <div className="absolute -left-8 md:-left-12 top-16 md:top-24 w-16 h-8 md:w-24 md:h-12 bg-[#8b4513] rounded-full border-4 border-[#5a3a1a] md:border-8" />
+            <div className="absolute -right-8 md:-right-12 top-16 md:top-24 w-16 h-8 md:w-24 md:h-12 bg-[#8b4513] rounded-full border-4 border-[#5a3a1a] md:border-8" />
           </div>
           
           {/* Legs */}
-          <div className="flex justify-center gap-1 md:gap-2 mt-0.5 md:mt-1">
-            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
-            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
+          <div className="flex justify-center gap-4 md:gap-8 mt-2 md:mt-4">
+            <div className="w-8 h-20 md:w-12 md:h-32 bg-[#5a3a1a] rounded-b-lg border-4 border-[#3a2a0a] md:border-8" />
+            <div className="w-8 h-20 md:w-12 md:h-32 bg-[#5a3a1a] rounded-b-lg border-4 border-[#3a2a0a] md:border-8" />
           </div>
         </div>}
     </div>;
