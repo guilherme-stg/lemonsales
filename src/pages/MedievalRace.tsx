@@ -169,7 +169,7 @@ export default function MedievalRace() {
               </div>
 
               {/* Ground/Floor Layer - Aligned with black line */}
-              <div className="absolute bottom-0 left-0 right-0 h-[640px] md:h-[672px] overflow-hidden border-t-4 border-[#000]">
+              <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 overflow-hidden border-t-4 border-[#000]">
                 {/* Dirt blocks - starts immediately from top (after border) */}
                 <div className="absolute inset-0 mario-ground-scroll" style={{
                 width: '200%',
