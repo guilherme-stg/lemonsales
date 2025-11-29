@@ -1,4 +1,4 @@
-import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User, Key, ShoppingCart } from 'lucide-react';
+import { Home, Plus, Trophy, Target, Users, UserPlus, FileText, Settings, Award, User, Key, ShoppingCart, Swords } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useAuth } from '@/contexts/AuthContext';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,7 @@ interface MenuItem {
 
 const baseItems: MenuItem[] = [
   { title: 'Rankings', url: '/rankings', icon: Trophy },
+  { title: 'Corrida Medieval', url: '/medieval-race', icon: Swords },
   { title: 'Registrar Venda', url: '/registrar-venda', icon: Plus },
   { title: 'Minhas Conquistas', url: '/conquistas', icon: Award },
   { title: 'Acompanhar Metas', url: '/metas', icon: Target },
