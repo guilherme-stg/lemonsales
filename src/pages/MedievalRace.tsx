@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { Sword, Shield } from 'lucide-react';
 import wizardAvatar from '@/assets/wizard.png';
+import catAvatar from '@/assets/cat.png';
 
 interface VendedorRace {
   id: string;
@@ -405,6 +406,28 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
           
           <img 
             src={wizardAvatar} 
+            alt={nome}
+            className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
+            style={{
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+            }}
+          />
+        </div>
+      ) : nome.toLowerCase().includes('guilherme') ? (
+        // Cat character - just the image
+        <div 
+          className="relative"
+          style={{ animation: 'walk 1s ease-in-out infinite' }}
+        >
+          {/* Crown for leader */}
+          {isLeader && (
+            <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
+              👑
+            </div>
+          )}
+          
+          <img 
+            src={catAvatar} 
             alt={nome}
             className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
             style={{
