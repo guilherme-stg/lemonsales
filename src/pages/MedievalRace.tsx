@@ -186,12 +186,16 @@ export default function MedievalRace() {
                 />
               </div>
 
-              {/* Ground/Floor Layer - Mario Green */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 overflow-hidden">
-                <div className="absolute inset-0 mario-ground-scroll" 
+              {/* Ground/Floor Layer - Mario Block Style */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 overflow-hidden border-t-4 border-[#000]">
+                {/* Grass top */}
+                <div className="absolute top-0 left-0 right-0 h-3 md:h-4 bg-[#7cc576]" />
+                
+                {/* Dirt blocks */}
+                <div className="absolute inset-0 top-3 md:top-4 mario-ground-scroll" 
                      style={{
                        width: '200%',
-                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Crect fill='%237cc576' width='800' height='60'/%3E%3Crect fill='%23c09050' y='60' width='800' height='20'/%3E%3C/svg%3E")`,
+                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Cdefs%3E%3Cpattern id='dirt-block' x='0' y='0' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Crect fill='%23c09050' width='40' height='40'/%3E%3Crect fill='%23a0703a' x='1' y='1' width='38' height='38'/%3E%3Ccircle fill='%238b5a2b' cx='10' cy='10' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='25' cy='15' r='1.5'/%3E%3Ccircle fill='%238b5a2b' cx='15' cy='28' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='30' cy='30' r='1.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23dirt-block)' width='800' height='80'/%3E%3C/svg%3E")`,
                        backgroundRepeat: 'repeat-x',
                        backgroundSize: '800px 80px',
                        backgroundPosition: 'bottom'
@@ -442,34 +446,40 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 function DecorativeElements() {
   return (
     <>
-      {/* Mario Pipes */}
-      <div className="absolute bottom-24 left-[8%] hidden md:block z-5">
+      {/* Mario Pipes - Better positioned */}
+      <div className="absolute bottom-24 md:bottom-32 left-[8%] hidden md:block z-5">
         <MarioPipe />
       </div>
-      <div className="absolute bottom-24 right-[12%] hidden lg:block z-5">
+      <div className="absolute bottom-24 md:bottom-32 right-[12%] hidden lg:block z-5">
         <MarioPipe />
       </div>
 
-      {/* Question Blocks */}
-      <div className="absolute bottom-48 left-[20%] hidden lg:block">
+      {/* Platform 1 - Left side */}
+      <div className="absolute bottom-48 md:bottom-56 left-[18%] hidden lg:flex gap-0">
         <QuestionBlock />
+        <BrickBlock />
+        <QuestionBlock delay={0.2} />
       </div>
-      <div className="absolute bottom-56 left-[35%] hidden lg:block">
+
+      {/* Platform 2 - Middle */}
+      <div className="absolute bottom-52 md:bottom-64 left-[42%] hidden lg:flex gap-0">
+        <BrickBlock />
+        <QuestionBlock delay={0.4} />
+        <BrickBlock />
+        <BrickBlock />
+      </div>
+
+      {/* Platform 3 - Right side */}
+      <div className="absolute bottom-48 md:bottom-56 right-[22%] hidden lg:flex gap-0">
+        <QuestionBlock delay={0.6} />
+        <BrickBlock />
+        <QuestionBlock delay={0.8} />
+      </div>
+
+      {/* Floating single blocks */}
+      <div className="absolute bottom-44 md:bottom-52 left-[65%] hidden md:block">
         <QuestionBlock delay={0.3} />
       </div>
-      <div className="absolute bottom-48 right-[30%] hidden lg:block">
-        <QuestionBlock delay={0.6} />
-      </div>
-
-      {/* Brick Blocks */}
-      <div className="absolute bottom-40 left-[50%] w-8 h-8 md:w-10 md:h-10 bg-[#d4824a] border-2 border-[#a0522d] hidden md:block" style={{
-        backgroundImage: `linear-gradient(90deg, #d4824a 0%, #c87345 50%, #d4824a 100%)`,
-        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.2)'
-      }} />
-      <div className="absolute bottom-52 right-[40%] w-8 h-8 md:w-10 md:h-10 bg-[#d4824a] border-2 border-[#a0522d] hidden lg:block" style={{
-        backgroundImage: `linear-gradient(90deg, #d4824a 0%, #c87345 50%, #d4824a 100%)`,
-        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.2)'
-      }} />
     </>
   );
 }
@@ -478,16 +488,18 @@ function MarioPipe() {
   return (
     <div className="relative" style={{ animation: 'pipe-breathe 3s ease-in-out infinite' }}>
       {/* Pipe top rim */}
-      <div className="w-12 md:w-16 h-3 md:h-4 bg-[#4caf50] border-2 border-[#2e7d32] rounded-t-lg mb-[-2px] relative z-10" style={{
-        boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.3)'
+      <div className="w-14 md:w-20 h-4 md:h-5 bg-gradient-to-b from-[#4caf50] to-[#43a047] border-2 md:border-3 border-[#1b5e20] rounded-t-xl mb-[-2px] relative z-10" style={{
+        boxShadow: 'inset 0 3px 6px rgba(255,255,255,0.4), 0 3px 6px rgba(0,0,0,0.4)'
       }} />
       {/* Pipe body */}
-      <div className="w-10 md:w-14 h-12 md:h-16 bg-[#66bb6a] border-2 border-[#2e7d32] mx-auto relative" style={{
+      <div className="w-12 md:w-16 h-16 md:h-20 bg-gradient-to-r from-[#5cb85c] via-[#66bb6a] to-[#5cb85c] border-2 md:border-3 border-[#1b5e20] mx-auto relative" style={{
         borderTop: 'none',
-        boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.3), inset 2px 0 4px rgba(255,255,255,0.2)'
+        boxShadow: 'inset -3px 0 6px rgba(0,0,0,0.3), inset 3px 0 6px rgba(255,255,255,0.3)'
       }}>
         {/* Pipe highlight */}
-        <div className="absolute left-1 top-0 w-1 md:w-2 h-full bg-white/20" />
+        <div className="absolute left-1 md:left-2 top-0 w-1 md:w-2 h-full bg-white/30 rounded-l" />
+        {/* Pipe shadow */}
+        <div className="absolute right-1 md:right-2 top-0 w-1 md:w-2 h-full bg-black/20 rounded-r" />
       </div>
     </div>
   );
@@ -496,18 +508,35 @@ function MarioPipe() {
 function QuestionBlock({ delay = 0 }: { delay?: number }) {
   return (
     <div 
-      className="relative w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-[#f4d03f] to-[#f39c12] border-2 border-[#d68910] animate-bounce"
+      className="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#ffd54f] via-[#f4d03f] to-[#f39c12] border-2 md:border-3 border-[#d68910] animate-bounce"
       style={{
         animationDelay: `${delay}s`,
-        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.2)'
+        boxShadow: 'inset -3px -3px 6px rgba(0,0,0,0.3), inset 3px 3px 6px rgba(255,255,255,0.5), 0 4px 8px rgba(0,0,0,0.3)',
+        animationDuration: '1.5s'
       }}
     >
       {/* Question mark */}
-      <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg md:text-xl" style={{
-        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+      <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl md:text-2xl" style={{
+        textShadow: '2px 2px 3px rgba(0,0,0,0.6)',
+        fontFamily: 'Arial Black, sans-serif'
       }}>
         ?
       </div>
     </div>
+  );
+}
+
+function BrickBlock() {
+  return (
+    <div 
+      className="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#e67e22] via-[#d35400] to-[#c87345] border-2 md:border-3 border-[#8b4513]"
+      style={{
+        boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.4), inset 2px 2px 4px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.3)',
+        backgroundImage: `
+          linear-gradient(90deg, transparent 48%, rgba(139,69,19,0.3) 48%, rgba(139,69,19,0.3) 52%, transparent 52%),
+          linear-gradient(0deg, transparent 48%, rgba(139,69,19,0.3) 48%, rgba(139,69,19,0.3) 52%, transparent 52%)
+        `
+      }}
+    />
   );
 }
