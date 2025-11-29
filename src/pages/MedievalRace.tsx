@@ -393,7 +393,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
   return (
     <div 
-      className="absolute bottom-0 transition-all duration-1000 ease-out"
+      className="absolute bottom-0 transition-all duration-1000 ease-out flex flex-col items-center"
       style={{ 
         left: `${posX}%`, 
         transform: 'translateX(-50%)',
@@ -404,7 +404,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
     >
       {/* Speech Bubble - CLOSER to character */}
       <div 
-        className="absolute bottom-full mb-2 md:mb-3 left-1/2 -translate-x-1/2 whitespace-nowrap"
+        className="mb-2 md:mb-3 whitespace-nowrap"
         style={{ animation: 'float-bubble 3s ease-in-out infinite' }}
       >
         <div className="relative bg-[#f4e4c1] border-2 md:border-4 border-[#8b6f47] rounded-lg px-2 py-1.5 md:px-4 md:py-3 shadow-lg">
@@ -412,7 +412,7 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             <div className="text-xs md:text-sm font-bold text-[#2a1810] mb-0.5 md:mb-1">{nomeExibicao}</div>
             <div className="text-sm md:text-lg font-bold text-[#8b4513]">{faturamentoFormatado}</div>
           </div>
-          {/* Bubble tail */}
+          {/* Bubble tail - centered */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] md:border-l-8 border-r-[6px] md:border-r-8 border-t-[6px] md:border-t-8 border-transparent border-t-[#8b6f47]" />
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] md:border-l-6 border-r-[4px] md:border-r-6 border-t-[4px] md:border-t-6 border-transparent border-t-[#f4e4c1] mt-[-1px] md:mt-[-2px]" />
         </div>
