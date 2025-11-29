@@ -392,9 +392,9 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
 
       {/* Character */}
       {nome.toLowerCase().includes('matheus') ? (
-        // Wizard character - just the image
+        // Wizard character - padronized height
         <div 
-          className="relative"
+          className="relative flex flex-col items-center"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
         >
           {/* Crown for leader */}
@@ -404,19 +404,24 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          <img 
-            src={wizardAvatar} 
-            alt={nome}
-            className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
-            style={{
-              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-            }}
-          />
+          {/* Main avatar container with same total height as medieval character */}
+          <div className="flex flex-col items-center">
+            <img 
+              src={wizardAvatar} 
+              alt={nome}
+              className="w-12 h-16 md:w-16 md:h-20 object-contain hover:scale-110 transition-transform"
+              style={{
+                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+              }}
+            />
+            {/* Spacer for legs equivalent */}
+            <div className="h-5 md:h-8" />
+          </div>
         </div>
       ) : nome.toLowerCase().includes('guilherme') ? (
-        // Cat character - just the image
+        // Cat character - padronized height
         <div 
-          className="relative"
+          className="relative flex flex-col items-center"
           style={{ animation: 'walk 1s ease-in-out infinite' }}
         >
           {/* Crown for leader */}
@@ -426,15 +431,19 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
             </div>
           )}
           
-          <img 
-            src={catAvatar} 
-            alt={nome}
-            className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
-            style={{
-              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined,
-              transform: 'translateY(2px)' // Ajuste para alinhar com o chão
-            }}
-          />
+          {/* Main avatar container with same total height as medieval character */}
+          <div className="flex flex-col items-center">
+            <img 
+              src={catAvatar} 
+              alt={nome}
+              className="w-12 h-16 md:w-16 md:h-20 object-contain hover:scale-110 transition-transform"
+              style={{
+                filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+              }}
+            />
+            {/* Spacer for legs equivalent */}
+            <div className="h-5 md:h-8" />
+          </div>
         </div>
       ) : (
         // Default medieval character
