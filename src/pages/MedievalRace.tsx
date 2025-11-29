@@ -208,7 +208,7 @@ export default function MedievalRace() {
                 </div>
               </div> : (/* Characters Layer - FIXED: Now anchored to raised ground */
           <div className="absolute bottom-40 md:bottom-48 left-0 right-0 h-32 md:h-40 z-10">
-                <div className="relative w-full h-full my-0 pb-0 py-[107px]">
+                <div className="relative w-full h-full my-0 pb-0 py-[110px]">
                   {vendedores.map((vendedor, index) => {
                 const progresso = maxFaturamento > 0 ? vendedor.faturamentoMensal / maxFaturamento : 0;
                 const posX = 10 + progresso * 70; // 10% a 80% da largura
