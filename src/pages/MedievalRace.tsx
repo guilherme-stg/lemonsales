@@ -186,13 +186,13 @@ export default function MedievalRace() {
                 />
               </div>
 
-              {/* Ground/Floor Layer - Mario Block Style */}
-              <div className="absolute bottom-0 left-0 right-0 h-24 md:h-32 overflow-hidden border-t-4 border-[#000]">
-                {/* Grass top */}
-                <div className="absolute top-0 left-0 right-0 h-3 md:h-4 bg-[#7cc576]" />
+              {/* Ground/Floor Layer - Aligned with grass line */}
+              <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 overflow-hidden border-t-4 border-[#000]">
+                {/* Grass top - thicker */}
+                <div className="absolute top-0 left-0 right-0 h-8 md:h-10 bg-[#7cc576]" />
                 
-                {/* Dirt blocks */}
-                <div className="absolute inset-0 top-3 md:top-4 mario-ground-scroll" 
+                {/* Dirt blocks - starts right below grass */}
+                <div className="absolute inset-0 top-8 md:top-10 mario-ground-scroll" 
                      style={{
                        width: '200%',
                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 80'%3E%3Cdefs%3E%3Cpattern id='dirt-block' x='0' y='0' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Crect fill='%23c09050' width='40' height='40'/%3E%3Crect fill='%23a0703a' x='1' y='1' width='38' height='38'/%3E%3Ccircle fill='%238b5a2b' cx='10' cy='10' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='25' cy='15' r='1.5'/%3E%3Ccircle fill='%238b5a2b' cx='15' cy='28' r='2'/%3E%3Ccircle fill='%238b5a2b' cx='30' cy='30' r='1.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23dirt-block)' width='800' height='80'/%3E%3C/svg%3E")`,
@@ -202,6 +202,9 @@ export default function MedievalRace() {
                      }}
                 />
               </div>
+
+              {/* Flying Dragon Animation */}
+              <FlyingDragon />
 
               {/* Decorative Elements - Mario Style */}
               <DecorativeElements />
@@ -227,7 +230,7 @@ export default function MedievalRace() {
               </div>
             ) : (
               /* Characters Layer - FIXED: Now anchored to ground */
-              <div className="absolute bottom-24 md:bottom-32 left-0 right-0 h-32 md:h-40 z-10">
+              <div className="absolute bottom-32 md:bottom-40 left-0 right-0 h-32 md:h-40 z-10">
                 <div className="relative w-full h-full">
                   {vendedores.map((vendedor, index) => {
                     const progresso = maxFaturamento > 0 ? vendedor.faturamentoMensal / maxFaturamento : 0;
@@ -293,6 +296,32 @@ export default function MedievalRace() {
         @keyframes pipe-breathe {
           0%, 100% { transform: scaleY(1); }
           50% { transform: scaleY(1.02); }
+        }
+
+        @keyframes dragon-fly {
+          0% { 
+            transform: translateX(-150px) translateY(0);
+            opacity: 0;
+          }
+          1% {
+            opacity: 1;
+          }
+          13.33% { /* 12s flight across screen out of 90s total = 13.33% of animation */
+            transform: translateX(calc(100vw + 150px)) translateY(0);
+            opacity: 1;
+          }
+          13.34% {
+            opacity: 0;
+          }
+          100% { 
+            transform: translateX(-150px) translateY(0);
+            opacity: 0;
+          }
+        }
+
+        @keyframes dragon-flap {
+          0%, 100% { transform: scaleY(1); }
+          50% { transform: scaleY(0.9); }
         }
 
         @keyframes character-enter {
@@ -380,9 +409,9 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
         animation: 'character-enter 0.8s ease-out'
       }}
     >
-      {/* Speech Bubble */}
+      {/* Speech Bubble - CLOSER to character */}
       <div 
-        className="absolute bottom-full mb-12 md:mb-16 left-1/2 -translate-x-1/2 whitespace-nowrap"
+        className="absolute bottom-full mb-2 md:mb-3 left-1/2 -translate-x-1/2 whitespace-nowrap"
         style={{ animation: 'float-bubble 3s ease-in-out infinite' }}
       >
         <div className="relative bg-[#f4e4c1] border-2 md:border-4 border-[#8b6f47] rounded-lg px-2 py-1.5 md:px-4 md:py-3 shadow-lg">
@@ -442,43 +471,38 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
   );
 }
 
-// Decorative Mario-style elements
+// Decorative Mario-style elements - NO QUESTION BLOCKS
 function DecorativeElements() {
   return (
     <>
       {/* Mario Pipes - Better positioned */}
-      <div className="absolute bottom-24 md:bottom-32 left-[8%] hidden md:block z-5">
+      <div className="absolute bottom-32 md:bottom-40 left-[8%] hidden md:block z-5">
         <MarioPipe />
       </div>
-      <div className="absolute bottom-24 md:bottom-32 right-[12%] hidden lg:block z-5">
+      <div className="absolute bottom-32 md:bottom-40 right-[12%] hidden lg:block z-5">
         <MarioPipe />
       </div>
 
-      {/* Platform 1 - Left side */}
-      <div className="absolute bottom-48 md:bottom-56 left-[18%] hidden lg:flex gap-0">
-        <QuestionBlock />
+      {/* Platform 1 - Left side - Only brick blocks */}
+      <div className="absolute bottom-56 md:bottom-64 left-[18%] hidden lg:flex gap-0">
         <BrickBlock />
-        <QuestionBlock delay={0.2} />
-      </div>
-
-      {/* Platform 2 - Middle */}
-      <div className="absolute bottom-52 md:bottom-64 left-[42%] hidden lg:flex gap-0">
-        <BrickBlock />
-        <QuestionBlock delay={0.4} />
         <BrickBlock />
         <BrickBlock />
       </div>
 
-      {/* Platform 3 - Right side */}
-      <div className="absolute bottom-48 md:bottom-56 right-[22%] hidden lg:flex gap-0">
-        <QuestionBlock delay={0.6} />
+      {/* Platform 2 - Middle - Only brick blocks */}
+      <div className="absolute bottom-60 md:bottom-72 left-[42%] hidden lg:flex gap-0">
         <BrickBlock />
-        <QuestionBlock delay={0.8} />
+        <BrickBlock />
+        <BrickBlock />
+        <BrickBlock />
       </div>
 
-      {/* Floating single blocks */}
-      <div className="absolute bottom-44 md:bottom-52 left-[65%] hidden md:block">
-        <QuestionBlock delay={0.3} />
+      {/* Platform 3 - Right side - Only brick blocks */}
+      <div className="absolute bottom-56 md:bottom-64 right-[22%] hidden lg:flex gap-0">
+        <BrickBlock />
+        <BrickBlock />
+        <BrickBlock />
       </div>
     </>
   );
@@ -538,5 +562,53 @@ function BrickBlock() {
         `
       }}
     />
+  );
+}
+
+// Flying Dragon Component - passes every 90 seconds
+function FlyingDragon() {
+  return (
+    <div 
+      className="absolute top-[20%] left-0 z-30 pointer-events-none"
+      style={{ 
+        animation: 'dragon-fly 90s linear infinite', // 90 seconds total cycle
+        animationDelay: '5s', // starts after 5s
+      }}
+    >
+      <div className="relative w-32 h-24 md:w-40 md:h-32">
+        {/* Dragon Body */}
+        <div className="absolute inset-0">
+          {/* Head */}
+          <div className="absolute top-2 right-4 w-12 h-10 md:w-16 md:h-12 bg-gradient-to-br from-[#8b0000] to-[#dc143c] rounded-tr-3xl rounded-br-lg border-2 border-[#5a0000]">
+            {/* Eye */}
+            <div className="absolute top-2 right-2 w-2 h-2 md:w-3 md:h-3 bg-yellow-400 rounded-full animate-pulse" />
+            {/* Horn */}
+            <div className="absolute -top-2 right-3 w-0 h-0 border-l-4 border-r-4 border-b-8 border-transparent border-b-[#5a0000]" />
+          </div>
+          
+          {/* Body */}
+          <div className="absolute top-6 right-12 w-16 h-8 md:w-20 md:h-10 bg-gradient-to-r from-[#dc143c] to-[#8b0000] rounded-l-2xl border-2 border-[#5a0000]" />
+          
+          {/* Wings - animated */}
+          <div 
+            className="absolute top-4 right-16 w-12 h-8 md:w-16 md:h-12 bg-gradient-to-br from-[#ff6b6b]/80 to-[#8b0000]/80 rounded-tl-3xl rounded-bl-lg border border-[#5a0000]"
+            style={{ 
+              animation: 'dragon-flap 0.5s ease-in-out infinite',
+              transformOrigin: 'right center'
+            }}
+          />
+          
+          {/* Tail */}
+          <div className="absolute top-8 left-0 w-16 h-4 md:w-20 md:h-5 bg-gradient-to-l from-[#8b0000] to-transparent rounded-l-full">
+            <div className="absolute -right-2 -top-1 w-0 h-0 border-l-6 border-r-6 border-t-8 border-transparent border-t-[#dc143c]" />
+          </div>
+          
+          {/* Fire Breath */}
+          <div className="absolute top-6 right-1 w-8 h-4 md:w-10 md:h-5">
+            <div className="w-full h-full bg-gradient-to-r from-[#ff4500] via-[#ffa500] to-transparent rounded-r-full opacity-80 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
