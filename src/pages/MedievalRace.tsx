@@ -419,53 +419,72 @@ function CharacterWithBubble({ vendedorId, nome, faturamento, posX, isLeader, av
       </div>
 
       {/* Character */}
-      <div 
-        className="relative"
-        style={{ animation: 'walk 1s ease-in-out infinite' }}
-      >
-        {/* Crown for leader with glow */}
-        {isLeader && (
-          <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
-            👑
-          </div>
-        )}
-        
-        {/* Character body */}
+      {nome.toLowerCase().includes('matheus') ? (
+        // Wizard character - just the image
         <div 
-          className="w-12 h-16 md:w-16 md:h-20 rounded-t-full border-2 md:border-4 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110"
-          style={{ 
-            backgroundColor: characterColor,
-            boxShadow: isLeader ? '0 0 20px rgba(212, 175, 55, 0.6)' : undefined
-          }}
+          className="relative"
+          style={{ animation: 'walk 1s ease-in-out infinite' }}
         >
-          {/* Avatar or Icon */}
-          {nome.toLowerCase().includes('matheus') ? (
-            <img 
-              src={wizardAvatar} 
-              alt={nome}
-              className="w-8 h-8 md:w-12 md:h-12 object-contain"
-            />
-          ) : avatarUrl ? (
-            <img 
-              src={avatarUrl} 
-              alt={nome}
-              className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover"
-            />
-          ) : (
-            <div className="text-xl md:text-3xl">{characterIcon}</div>
+          {/* Crown for leader */}
+          {isLeader && (
+            <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
+              👑
+            </div>
           )}
           
-          {/* Arms */}
-          <div className="absolute -left-2 md:-left-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
-          <div className="absolute -right-2 md:-right-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
+          <img 
+            src={wizardAvatar} 
+            alt={nome}
+            className="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-110 transition-transform"
+            style={{
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+            }}
+          />
         </div>
-        
-        {/* Legs */}
-        <div className="flex justify-center gap-1 md:gap-2 mt-0.5 md:mt-1">
-          <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
-          <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
+      ) : (
+        // Default medieval character
+        <div 
+          className="relative"
+          style={{ animation: 'walk 1s ease-in-out infinite' }}
+        >
+          {/* Crown for leader with glow */}
+          {isLeader && (
+            <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
+              👑
+            </div>
+          )}
+          
+          {/* Character body */}
+          <div 
+            className="w-12 h-16 md:w-16 md:h-20 rounded-t-full border-2 md:border-4 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110"
+            style={{ 
+              backgroundColor: characterColor,
+              boxShadow: isLeader ? '0 0 20px rgba(212, 175, 55, 0.6)' : undefined
+            }}
+          >
+            {/* Avatar or Icon */}
+            {avatarUrl ? (
+              <img 
+                src={avatarUrl} 
+                alt={nome}
+                className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover"
+              />
+            ) : (
+              <div className="text-xl md:text-3xl">{characterIcon}</div>
+            )}
+            
+            {/* Arms */}
+            <div className="absolute -left-2 md:-left-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
+            <div className="absolute -right-2 md:-right-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
+          </div>
+          
+          {/* Legs */}
+          <div className="flex justify-center gap-1 md:gap-2 mt-0.5 md:mt-1">
+            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
+            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
