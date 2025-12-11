@@ -68,39 +68,73 @@ export default function MedievalRace() {
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
       
-      // Buscar todos os perfis aprovados com papel VENDEDOR
-      const { data: profiles, error: profilesError } = await supabase
+      // Query original com JOIN para manter dados corretos
+      const { data: vendas, error } = await supabase
+        .from('vendas')
+        .select(`
+          usuario_id,
+          valor,
+          profiles!inner(id, nome, avatar_url)
+        `)
+        .eq('status', 'APROVADA')
+        .gte('data_venda', firstDayOfMonth.toISOString())
+        .lte('data_venda', lastDayOfMonth.toISOString());
+      
+      if (error) throw error;
+
+      // Agrupar por vendedor e somar faturamento
+      const faturamentoPorVendedor = new Map<string, {
+        nome: string;
+        total: number;
+        avatar_url: string | null;
+      }>();
+      
+      vendas?.forEach((venda: any) => {
+        const vendedorId = venda.usuario_id;
+        const vendedorNome = venda.profiles.nome;
+        const vendedorAvatar = venda.profiles.avatar_url;
+        if (!faturamentoPorVendedor.has(vendedorId)) {
+          faturamentoPorVendedor.set(vendedorId, {
+            nome: vendedorNome,
+            total: 0,
+            avatar_url: vendedorAvatar
+          });
+        }
+        const current = faturamentoPorVendedor.get(vendedorId)!;
+        current.total += Number(venda.valor);
+      });
+
+      // Criar array dos vendedores COM vendas
+      const vendedoresComVendas: VendedorRace[] = Array.from(faturamentoPorVendedor.entries()).map(([id, data]) => ({
+        id,
+        nome: data.nome,
+        faturamentoMensal: data.total,
+        avatar_url: data.avatar_url
+      }));
+
+      // Buscar perfis aprovados de VENDEDOR para adicionar os que não têm vendas
+      const { data: allProfiles } = await supabase
         .from('profiles')
         .select('id, nome, avatar_url')
         .eq('aprovado', true)
         .eq('papel', 'VENDEDOR');
-      
-      if (profilesError) throw profilesError;
 
-      // Buscar vendas do mês
-      const {
-        data: vendas,
-        error
-      } = await supabase.from('vendas').select(`
-          usuario_id,
-          valor
-        `).eq('status', 'APROVADA').gte('data_venda', firstDayOfMonth.toISOString()).lte('data_venda', lastDayOfMonth.toISOString());
-      if (error) throw error;
+      // IDs dos que já têm vendas
+      const idsComVendas = new Set(vendedoresComVendas.map(v => v.id));
 
-      // Agrupar vendas por vendedor
-      const faturamentoPorVendedor = new Map<string, number>();
-      vendas?.forEach((venda: any) => {
-        const current = faturamentoPorVendedor.get(venda.usuario_id) || 0;
-        faturamentoPorVendedor.set(venda.usuario_id, current + Number(venda.valor));
-      });
+      // Adicionar vendedores sem vendas com R$ 0,00
+      const vendedoresSemVendas: VendedorRace[] = (allProfiles || [])
+        .filter(profile => !idsComVendas.has(profile.id))
+        .map(profile => ({
+          id: profile.id,
+          nome: profile.nome,
+          faturamentoMensal: 0,
+          avatar_url: profile.avatar_url
+        }));
 
-      // Criar array com todos os vendedores (com ou sem vendas)
-      const vendedoresArray: VendedorRace[] = (profiles || []).map((profile) => ({
-        id: profile.id,
-        nome: profile.nome,
-        faturamentoMensal: faturamentoPorVendedor.get(profile.id) || 0,
-        avatar_url: profile.avatar_url
-      })).sort((a, b) => b.faturamentoMensal - a.faturamentoMensal);
+      // Combinar e ordenar por faturamento
+      const vendedoresArray = [...vendedoresComVendas, ...vendedoresSemVendas]
+        .sort((a, b) => b.faturamentoMensal - a.faturamentoMensal);
       
       setVendedores(vendedoresArray);
     } catch (error) {
