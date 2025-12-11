@@ -377,9 +377,19 @@ export default function MedievalRace() {
     </SidebarProvider>;
 }
 
-// Medieval character icons
-const MEDIEVAL_ICONS = ['🛡️', '⚔️', '🏹', '🪓', '🗡️', '⚔️'];
-const CHARACTER_COLORS = ['#8b4513', '#a0522d', '#6b4423', '#8b6f47', '#704214'];
+// Array de avatares disponíveis para seleção aleatória
+const AVAILABLE_AVATARS = [matheusAvatar, guilhermeAvatar, brianAvatar, kilsonAvatar];
+
+// Função para selecionar avatar aleatório baseado no ID (determinístico)
+const getRandomAvatar = (vendedorId: string) => {
+  let hash = 0;
+  for (let i = 0; i < vendedorId.length; i++) {
+    hash = ((hash << 5) - hash) + vendedorId.charCodeAt(i);
+    hash = hash & hash;
+  }
+  return AVAILABLE_AVATARS[Math.abs(hash) % AVAILABLE_AVATARS.length];
+};
+
 interface CharacterProps {
   vendedorId: string;
   nome: string;
@@ -390,6 +400,7 @@ interface CharacterProps {
   verticalOffset: number;
   zIndex: number;
 }
+
 function CharacterWithBubble({
   vendedorId,
   nome,
@@ -408,22 +419,36 @@ function CharacterWithBubble({
     maximumFractionDigits: 0
   }).format(faturamento);
 
-  // Selecionar ícone e cor baseado no vendedorId para consistência
-  const iconIndex = vendedorId.charCodeAt(0) % MEDIEVAL_ICONS.length;
-  const colorIndex = vendedorId.charCodeAt(1) % CHARACTER_COLORS.length;
-  const characterIcon = MEDIEVAL_ICONS[iconIndex];
-  const characterColor = isLeader ? '#d4af37' : CHARACTER_COLORS[colorIndex];
-  return <div className="absolute bottom-0 transition-all duration-1000 ease-out flex flex-col items-center" style={{
-    left: `${posX}%`,
-    transform: 'translateX(-50%)',
-    bottom: `${verticalOffset}px`,
-    zIndex,
-    animation: 'character-enter 0.8s ease-out'
-  }}>
-      {/* Speech Bubble - CLOSER to character */}
+  // Determinar qual avatar usar
+  const nomeLower = nome.toLowerCase();
+  const isMatheus = nomeLower.includes('matheus');
+  const isGuilherme = nomeLower.includes('guilherme');
+  const isBrian = nomeLower.includes('brian');
+  const isKilson = nomeLower.includes('kilson');
+  const hasCustomAvatar = isMatheus || isGuilherme || isBrian || isKilson;
+
+  // Selecionar avatar: específico ou aleatório
+  const selectedAvatar = isMatheus ? matheusAvatar 
+    : isGuilherme ? guilhermeAvatar 
+    : isBrian ? brianAvatar 
+    : isKilson ? kilsonAvatar 
+    : getRandomAvatar(vendedorId);
+
+  return (
+    <div 
+      className="absolute bottom-0 transition-all duration-1000 ease-out flex flex-col items-center" 
+      style={{
+        left: `${posX}%`,
+        transform: 'translateX(-50%)',
+        bottom: `${verticalOffset}px`,
+        zIndex,
+        animation: 'character-enter 0.8s ease-out'
+      }}
+    >
+      {/* Speech Bubble */}
       <div className="mb-2 md:mb-3 whitespace-nowrap" style={{
-      animation: 'float-bubble 3s ease-in-out infinite'
-    }}>
+        animation: 'float-bubble 3s ease-in-out infinite'
+      }}>
         <div className="relative bg-[#f4e4c1] border-2 md:border-4 border-[#8b6f47] rounded-lg px-2 py-1.5 md:px-4 md:py-3 shadow-lg">
           {/* Ícone de exclamação para quem não tem vendas */}
           {faturamento === 0 && (
@@ -433,87 +458,33 @@ function CharacterWithBubble({
           )}
           <div className="text-center">
             <div className="text-xs md:text-sm font-bold text-[#2a1810] mb-0.5 md:mb-1">{nomeExibicao}</div>
-            <div className={`text-sm md:text-lg font-bold ${faturamento === 0 ? 'text-[#dc2626]' : 'text-[#8b4513]'}`}>{faturamentoFormatado}</div>
+            <div className={`text-sm md:text-lg font-bold ${faturamento === 0 ? 'text-[#dc2626]' : 'text-[#8b4513]'}`}>
+              {faturamentoFormatado}
+            </div>
           </div>
-          {/* Bubble tail - centered */}
+          {/* Bubble tail */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] md:border-l-8 border-r-[6px] md:border-r-8 border-t-[6px] md:border-t-8 border-transparent border-t-[#8b6f47]" />
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] md:border-l-6 border-r-[4px] md:border-r-6 border-t-[4px] md:border-t-6 border-transparent border-t-[#f4e4c1] mt-[-1px] md:mt-[-2px]" />
         </div>
       </div>
 
-      {/* Character */}
-      {nome.toLowerCase().includes('matheus') ?
-    // Wizard character - 120px total height, moved down
-    <div className="relative" style={{
-      animation: 'walk 1s ease-in-out infinite',
-      transform: 'translateY(386px)' // Move down 386px to touch ground
-    }}>
-          <div className="flex flex-col items-center">
-            <img src={matheusAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
-          filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-        }} />
-          </div>
-        </div> : nome.toLowerCase().includes('guilherme') ?
-    // Guilherme wizard character - 120px total height, moved down
-    <div className="relative" style={{
-      animation: 'walk 1s ease-in-out infinite',
-      transform: 'translateY(386px)' // Move down 386px to touch ground
-    }}>
-          <div className="flex flex-col items-center">
-            <img src={guilhermeAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
-          filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-        }} />
-          </div>
-        </div> : nome.toLowerCase().includes('brian') ?
-    // Brian archer character - 120px total height, moved down
-    <div className="relative" style={{
-      animation: 'walk 1s ease-in-out infinite',
-      transform: 'translateY(386px)' // Move down 386px to touch ground
-    }}>
-          <div className="flex flex-col items-center">
-            <img src={brianAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
-          filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-        }} />
-          </div>
-        </div> : nome.toLowerCase().includes('kilson') ?
-    // Kilson knight character - 120px total height, moved down
-    <div className="relative" style={{
-      animation: 'walk 1s ease-in-out infinite',
-      transform: 'translateY(386px)' // Move down 386px to touch ground
-    }}>
-          <div className="flex flex-col items-center">
-            <img src={kilsonAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
-          height: '120px',
-          filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
-        }} />
-          </div>
-        </div> :
-    // Default medieval character
-    <div className="relative" style={{
-      animation: 'walk 1s ease-in-out infinite'
-    }}>
-          
-          {/* Character body */}
-          <div className="w-12 h-16 md:w-16 md:h-20 rounded-t-full border-2 md:border-4 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110" style={{
-        backgroundColor: characterColor,
-        boxShadow: isLeader ? '0 0 20px rgba(212, 175, 55, 0.6)' : undefined
+      {/* Character - Todos usam avatares de imagem agora */}
+      <div className="relative" style={{
+        animation: 'walk 1s ease-in-out infinite',
+        transform: 'translateY(386px)'
       }}>
-            {/* Avatar or Icon */}
-            {avatarUrl ? <img src={avatarUrl} alt={nome} className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover" /> : <div className="text-xl md:text-3xl">{characterIcon}</div>}
-            
-            {/* Arms */}
-            <div className="absolute -left-2 md:-left-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
-            <div className="absolute -right-2 md:-right-3 top-4 md:top-6 w-4 h-2 md:w-6 md:h-3 bg-[#8b4513] rounded-full border border-[#5a3a1a] md:border-2" />
-          </div>
-          
-          {/* Legs */}
-          <div className="flex justify-center gap-1 md:gap-2 mt-0.5 md:mt-1">
-            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
-            <div className="w-2 h-5 md:w-3 md:h-8 bg-[#5a3a1a] rounded-b-lg border border-[#3a2a0a] md:border-2" />
-          </div>
-        </div>}
-    </div>;
+        <div className="flex flex-col items-center">
+          <img 
+            src={selectedAvatar} 
+            alt={nome} 
+            className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" 
+            style={{
+              height: '120px',
+              filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+            }} 
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
