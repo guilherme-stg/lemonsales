@@ -10,6 +10,7 @@ import { Sword, Shield, Target, Maximize2, Minimize2 } from 'lucide-react';
 import matheusAvatar from '@/assets/matheus-ironman.png';
 import guilhermeAvatar from '@/assets/guilherme-wizard.png';
 import brianAvatar from '@/assets/brian-archer.png';
+import kilsonAvatar from '@/assets/kilson-knight.png';
 interface VendedorRace {
   id: string;
   nome: string;
@@ -436,6 +437,18 @@ function CharacterWithBubble({
     }}>
           <div className="flex flex-col items-center">
             <img src={brianAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
+          height: '120px',
+          filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
+        }} />
+          </div>
+        </div> : nome.toLowerCase().includes('kilson') ?
+    // Kilson knight character - 120px total height, moved down
+    <div className="relative" style={{
+      animation: 'walk 1s ease-in-out infinite',
+      transform: 'translateY(386px)' // Move down 386px to touch ground
+    }}>
+          <div className="flex flex-col items-center">
+            <img src={kilsonAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
           height: '120px',
           filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
         }} />
