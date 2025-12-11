@@ -288,11 +288,24 @@ export default function MedievalRace() {
           <div className="absolute bottom-40 md:bottom-48 left-0 right-0 h-32 md:h-40 z-10">
                 <div className="relative w-full h-full pb-0 px-0 py-[146px] mx-0 my-[83px]">
                   {vendedores.map((vendedor, index) => {
+                // Calcular posição X baseada no faturamento
                 const progresso = maxFaturamento > 0 ? vendedor.faturamentoMensal / maxFaturamento : 0;
                 const posX = 10 + progresso * 70; // 10% a 80% da largura
                 const isLeader = index === 0;
-                // Offset vertical para evitar sobreposição (menor)
-                const verticalOffset = index % 3 * 8;
+                
+                // Calcular quantos vendedores anteriores estão em posição similar (dentro de 8% de distância)
+                let stackLevel = 0;
+                for (let i = 0; i < index; i++) {
+                  const prevProgresso = maxFaturamento > 0 ? vendedores[i].faturamentoMensal / maxFaturamento : 0;
+                  const prevPosX = 10 + prevProgresso * 70;
+                  if (Math.abs(posX - prevPosX) < 8) {
+                    stackLevel++;
+                  }
+                }
+                
+                // Offset vertical maior para empilhar balões quando posições são similares
+                const verticalOffset = stackLevel * 70;
+                
                 return <CharacterWithBubble key={vendedor.id} vendedorId={vendedor.id} nome={vendedor.nome} faturamento={vendedor.faturamentoMensal} posX={posX} isLeader={isLeader} avatarUrl={vendedor.avatar_url} verticalOffset={verticalOffset} zIndex={index === 0 ? 100 : 50 - index} />;
               })}
                 </div>
