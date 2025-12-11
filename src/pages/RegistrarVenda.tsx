@@ -6,10 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Plus, DollarSign } from 'lucide-react';
+import { Plus, DollarSign, Users } from 'lucide-react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
+
+interface Vendedor {
+  id: string;
+  nome: string;
+}
 
 export default function RegistrarVenda() {
   const { user, profile, loading: authLoading } = useAuth();
@@ -17,6 +23,11 @@ export default function RegistrarVenda() {
   const [valorProducao, setValorProducao] = useState('');
   const [valorSetup, setValorSetup] = useState('');
   const [loading, setLoading] = useState(false);
+  const [vendedores, setVendedores] = useState<Vendedor[]>([]);
+  const [selectedVendedor, setSelectedVendedor] = useState<string>('');
+  const [loadingVendedores, setLoadingVendedores] = useState(false);
+
+  const isMaster = profile?.papel === 'MASTER';
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -24,11 +35,44 @@ export default function RegistrarVenda() {
     }
   }, [user, authLoading, navigate]);
 
+  // Carregar vendedores se for MASTER
+  useEffect(() => {
+    if (isMaster && user) {
+      loadVendedores();
+    }
+  }, [isMaster, user]);
+
+  const loadVendedores = async () => {
+    setLoadingVendedores(true);
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, nome')
+        .eq('aprovado', true)
+        .eq('papel', 'VENDEDOR')
+        .order('nome');
+
+      if (error) throw error;
+      setVendedores(data || []);
+    } catch (error) {
+      console.error('Erro ao carregar vendedores:', error);
+      toast.error('Erro ao carregar lista de vendedores');
+    } finally {
+      setLoadingVendedores(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!valorProducao || !valorSetup) {
       toast.error('Preencha todos os campos');
+      return;
+    }
+
+    // Se for MASTER, precisa selecionar um vendedor
+    if (isMaster && !selectedVendedor) {
+      toast.error('Selecione o vendedor que realizou a venda');
       return;
     }
 
@@ -40,10 +84,13 @@ export default function RegistrarVenda() {
 
     const pontos = Math.floor(total / 10);
 
+    // MASTER pode registrar para outro vendedor, demais usuários registram para si mesmos
+    const usuarioIdVenda = isMaster ? selectedVendedor : user!.id;
+
     const { error } = await supabase
       .from('vendas')
       .insert({
-        usuario_id: user!.id,
+        usuario_id: usuarioIdVenda,
         valor: total,
         tipo_venda: 'NOVA',
         cliente: 'Cliente',
@@ -56,9 +103,13 @@ export default function RegistrarVenda() {
       toast.error('Erro ao registrar venda');
       console.error(error);
     } else {
-      toast.success(`Venda registrada! +${pontos} pontos 🎉`);
+      const vendedorNome = isMaster 
+        ? vendedores.find(v => v.id === selectedVendedor)?.nome || 'Vendedor'
+        : 'Você';
+      toast.success(`Venda registrada para ${vendedorNome}! +${pontos} pontos 🎉`);
       setValorProducao('');
       setValorSetup('');
+      setSelectedVendedor('');
       
       // Redirect to rankings after 1.5 seconds
       setTimeout(() => navigate('/rankings'), 1500);
@@ -99,6 +150,35 @@ export default function RegistrarVenda() {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Seleção de vendedor - apenas para MASTER */}
+                    {isMaster && (
+                      <div className="space-y-2">
+                        <Label htmlFor="vendedor" className="flex items-center gap-2">
+                          <Users className="w-4 h-4" />
+                          Vendedor
+                        </Label>
+                        <Select 
+                          value={selectedVendedor} 
+                          onValueChange={setSelectedVendedor}
+                          disabled={loadingVendedores}
+                        >
+                          <SelectTrigger className="gaming-border">
+                            <SelectValue placeholder={loadingVendedores ? "Carregando..." : "Selecione o vendedor"} />
+                          </SelectTrigger>
+                          <SelectContent className="bg-background border gaming-border z-50">
+                            {vendedores.map((vendedor) => (
+                              <SelectItem key={vendedor.id} value={vendedor.id}>
+                                {vendedor.nome}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-muted-foreground">
+                          Como administrador, você pode registrar vendas para qualquer vendedor
+                        </p>
+                      </div>
+                    )}
+
                     <div className="space-y-2">
                       <Label htmlFor="valorProducao">Valor de Produção (R$)</Label>
                       <Input
@@ -151,7 +231,7 @@ export default function RegistrarVenda() {
                     <Button
                       type="submit"
                       className="w-full bg-gradient-primary hover:opacity-90"
-                      disabled={loading}
+                      disabled={loading || (isMaster && !selectedVendedor)}
                     >
                       {loading ? 'Registrando...' : 'Registrar Venda'}
                     </Button>
