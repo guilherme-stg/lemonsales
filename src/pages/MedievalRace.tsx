@@ -303,10 +303,10 @@ export default function MedievalRace() {
                   }
                 }
                 
-                // Offset vertical maior para empilhar balões quando posições são similares
-                const verticalOffset = stackLevel * 70;
+                // Offset para empilhar balões quando posições são similares
+                const bubbleOffset = stackLevel * 70;
                 
-                return <CharacterWithBubble key={vendedor.id} vendedorId={vendedor.id} nome={vendedor.nome} faturamento={vendedor.faturamentoMensal} posX={posX} isLeader={isLeader} avatarUrl={vendedor.avatar_url} verticalOffset={verticalOffset} zIndex={index === 0 ? 100 : 50 - index} />;
+                return <CharacterWithBubble key={vendedor.id} vendedorId={vendedor.id} nome={vendedor.nome} faturamento={vendedor.faturamentoMensal} posX={posX} isLeader={isLeader} avatarUrl={vendedor.avatar_url} bubbleOffset={bubbleOffset} zIndex={index === 0 ? 100 : 50 - index} />;
               })}
                 </div>
               </div>)}
@@ -410,7 +410,7 @@ interface CharacterProps {
   posX: number;
   isLeader: boolean;
   avatarUrl: string | null;
-  verticalOffset: number;
+  bubbleOffset: number;
   zIndex: number;
 }
 
@@ -421,7 +421,7 @@ function CharacterWithBubble({
   posX,
   isLeader,
   avatarUrl,
-  verticalOffset,
+  bubbleOffset,
   zIndex
 }: CharacterProps) {
   const nomeExibicao = nome.length > 12 ? nome.substring(0, 12) + '...' : nome;
@@ -438,7 +438,6 @@ function CharacterWithBubble({
   const isGuilherme = nomeLower.includes('guilherme');
   const isBrian = nomeLower.includes('brian');
   const isKilson = nomeLower.includes('kilson');
-  const hasCustomAvatar = isMatheus || isGuilherme || isBrian || isKilson;
 
   // Selecionar avatar: específico ou aleatório
   const selectedAvatar = isMatheus ? matheusAvatar 
@@ -453,14 +452,14 @@ function CharacterWithBubble({
       style={{
         left: `${posX}%`,
         transform: 'translateX(-50%)',
-        bottom: `${verticalOffset}px`,
         zIndex,
         animation: 'character-enter 0.8s ease-out'
       }}
     >
-      {/* Speech Bubble */}
+      {/* Speech Bubble - com offset para evitar sobreposição */}
       <div className="mb-2 md:mb-3 whitespace-nowrap" style={{
-        animation: 'float-bubble 3s ease-in-out infinite'
+        animation: 'float-bubble 3s ease-in-out infinite',
+        marginBottom: `${bubbleOffset + 8}px`
       }}>
         <div className="relative bg-[#f4e4c1] border-2 md:border-4 border-[#8b6f47] rounded-lg px-2 py-1.5 md:px-4 md:py-3 shadow-lg">
           {/* Ícone de exclamação para quem não tem vendas */}
