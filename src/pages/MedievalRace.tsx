@@ -6,7 +6,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { Sword, Shield, Target, Maximize2, Minimize2 } from 'lucide-react';
+import { Sword, Shield, Target, Maximize2, Minimize2, AlertCircle } from 'lucide-react';
 import matheusAvatar from '@/assets/matheus-ironman.png';
 import guilhermeAvatar from '@/assets/guilherme-wizard.png';
 import brianAvatar from '@/assets/brian-archer.png';
@@ -67,44 +67,41 @@ export default function MedievalRace() {
       const now = new Date();
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      
+      // Buscar todos os perfis aprovados com papel VENDEDOR
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, nome, avatar_url')
+        .eq('aprovado', true)
+        .eq('papel', 'VENDEDOR');
+      
+      if (profilesError) throw profilesError;
+
+      // Buscar vendas do mês
       const {
         data: vendas,
         error
       } = await supabase.from('vendas').select(`
           usuario_id,
-          valor,
-          profiles!inner(id, nome, avatar_url)
+          valor
         `).eq('status', 'APROVADA').gte('data_venda', firstDayOfMonth.toISOString()).lte('data_venda', lastDayOfMonth.toISOString());
       if (error) throw error;
 
-      // Agrupar por vendedor e somar faturamento
-      const faturamentoPorVendedor = new Map<string, {
-        nome: string;
-        total: number;
-        avatar_url: string | null;
-      }>();
+      // Agrupar vendas por vendedor
+      const faturamentoPorVendedor = new Map<string, number>();
       vendas?.forEach((venda: any) => {
-        const vendedorId = venda.usuario_id;
-        const vendedorNome = venda.profiles.nome;
-        const vendedorAvatar = venda.profiles.avatar_url;
-        if (!faturamentoPorVendedor.has(vendedorId)) {
-          faturamentoPorVendedor.set(vendedorId, {
-            nome: vendedorNome,
-            total: 0,
-            avatar_url: vendedorAvatar
-          });
-        }
-        const current = faturamentoPorVendedor.get(vendedorId)!;
-        current.total += Number(venda.valor);
+        const current = faturamentoPorVendedor.get(venda.usuario_id) || 0;
+        faturamentoPorVendedor.set(venda.usuario_id, current + Number(venda.valor));
       });
 
-      // Converter para array e ordenar por faturamento (maior para menor)
-      const vendedoresArray: VendedorRace[] = Array.from(faturamentoPorVendedor.entries()).map(([id, data]) => ({
-        id,
-        nome: data.nome,
-        faturamentoMensal: data.total,
-        avatar_url: data.avatar_url
+      // Criar array com todos os vendedores (com ou sem vendas)
+      const vendedoresArray: VendedorRace[] = (profiles || []).map((profile) => ({
+        id: profile.id,
+        nome: profile.nome,
+        faturamentoMensal: faturamentoPorVendedor.get(profile.id) || 0,
+        avatar_url: profile.avatar_url
       })).sort((a, b) => b.faturamentoMensal - a.faturamentoMensal);
+      
       setVendedores(vendedoresArray);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
@@ -394,9 +391,15 @@ function CharacterWithBubble({
       animation: 'float-bubble 3s ease-in-out infinite'
     }}>
         <div className="relative bg-[#f4e4c1] border-2 md:border-4 border-[#8b6f47] rounded-lg px-2 py-1.5 md:px-4 md:py-3 shadow-lg">
+          {/* Ícone de exclamação para quem não tem vendas */}
+          {faturamento === 0 && (
+            <div className="absolute -top-2 -right-2 bg-[#dc2626] rounded-full p-0.5 border border-[#991b1b]">
+              <AlertCircle className="w-3 h-3 md:w-4 md:h-4 text-white" />
+            </div>
+          )}
           <div className="text-center">
             <div className="text-xs md:text-sm font-bold text-[#2a1810] mb-0.5 md:mb-1">{nomeExibicao}</div>
-            <div className="text-sm md:text-lg font-bold text-[#8b4513]">{faturamentoFormatado}</div>
+            <div className={`text-sm md:text-lg font-bold ${faturamento === 0 ? 'text-[#dc2626]' : 'text-[#8b4513]'}`}>{faturamentoFormatado}</div>
           </div>
           {/* Bubble tail - centered */}
           <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] md:border-l-8 border-r-[6px] md:border-r-8 border-t-[6px] md:border-t-8 border-transparent border-t-[#8b6f47]" />
