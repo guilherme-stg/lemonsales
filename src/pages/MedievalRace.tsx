@@ -7,8 +7,8 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { Sword, Shield, Target, Maximize2, Minimize2 } from 'lucide-react';
-import wizardAvatar from '@/assets/wizard.png';
-import catAvatar from '@/assets/cat.png';
+import matheusAvatar from '@/assets/matheus-ironman.png';
+import guilhermeAvatar from '@/assets/guilherme-wizard.png';
 interface VendedorRace {
   id: string;
   nome: string;
@@ -410,7 +410,7 @@ function CharacterWithBubble({
       transform: 'translateY(386px)' // Move down 386px to touch ground
     }}>
           <div className="flex flex-col items-center">
-            <img src={wizardAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
+            <img src={matheusAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
           height: '120px',
           filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
         }} />
@@ -422,7 +422,7 @@ function CharacterWithBubble({
       transform: 'translateY(386px)' // Move down 386px to touch ground
     }}>
           <div className="flex flex-col items-center">
-            <img src={catAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
+            <img src={guilhermeAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
           height: '120px',
           filter: isLeader ? 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.6))' : undefined
         }} />
