@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -6,7 +6,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { Sword, Shield } from 'lucide-react';
+import { Sword, Shield, Target, Maximize2, Minimize2 } from 'lucide-react';
 import wizardAvatar from '@/assets/wizard.png';
 import catAvatar from '@/assets/cat.png';
 interface VendedorRace {
@@ -24,6 +24,24 @@ export default function MedievalRace() {
   } = useAuth();
   const [vendedores, setVendedores] = useState<VendedorRace[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const gameContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleFullscreen = () => {
+    if (!isFullscreen) {
+      gameContainerRef.current?.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth');
@@ -107,8 +125,8 @@ export default function MedievalRace() {
   const maxFaturamento = vendedores.length > 0 ? vendedores[0].faturamentoMensal : 0;
   return <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#1a0f0a]">
-        <AppSidebar />
-        <main className="flex-1 flex flex-col overflow-hidden">
+        {!isFullscreen && <AppSidebar />}
+        <main ref={gameContainerRef} className={`flex-1 flex flex-col overflow-hidden ${isFullscreen ? 'bg-[#1a0f0a]' : ''}`}>
           {/* Elaborate Medieval Banner Header */}
           <div className="relative z-10 p-4 md:p-6">
             <div className="relative bg-gradient-to-b from-[#8b4513] via-[#6b3410] to-[#4b2810] border-4 border-[#d4af37] rounded-lg shadow-2xl">
@@ -130,6 +148,33 @@ export default function MedievalRace() {
 
           {/* Super Mario Style Scene Container */}
           <div className="flex-1 relative overflow-hidden">
+            {/* Task List - Top Left */}
+            <div className="absolute top-4 left-4 z-30">
+              <div className="bg-[#f4e4c1]/95 border-2 border-[#8b6f47] rounded-lg px-4 py-3 shadow-lg backdrop-blur-sm">
+                <div className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-[#8b4513]" />
+                  <span className="text-sm font-bold text-[#2a1810] medieval-title">MISSÃO ATUAL</span>
+                </div>
+                <div className="text-lg font-bold text-[#8b4513] mt-1">
+                  Faturar R$ 350.000,00
+                </div>
+              </div>
+            </div>
+
+            {/* Fullscreen Button - Bottom Right */}
+            <button
+              onClick={toggleFullscreen}
+              className="absolute bottom-4 right-4 z-30 bg-[#2a1810]/30 hover:bg-[#2a1810]/70 
+                         border border-[#d4af37]/50 rounded-lg p-2 transition-all duration-300
+                         opacity-30 hover:opacity-100"
+              title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+            >
+              {isFullscreen ? (
+                <Minimize2 className="w-5 h-5 text-[#d4af37]" />
+              ) : (
+                <Maximize2 className="w-5 h-5 text-[#d4af37]" />
+              )}
+            </button>
             {/* Parallax Background Layers */}
             <div className="absolute inset-0">
               {/* Sky Layer - Mario Blue */}
@@ -364,11 +409,6 @@ function CharacterWithBubble({
       animation: 'walk 1s ease-in-out infinite',
       transform: 'translateY(386px)' // Move down 386px to touch ground
     }}>
-          {/* Crown for leader */}
-          {isLeader && <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
-              👑
-            </div>}
-          
           <div className="flex flex-col items-center">
             <img src={wizardAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
           height: '120px',
@@ -381,11 +421,6 @@ function CharacterWithBubble({
       animation: 'walk 1s ease-in-out infinite',
       transform: 'translateY(386px)' // Move down 386px to touch ground
     }}>
-          {/* Crown for leader */}
-          {isLeader && <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
-              👑
-            </div>}
-          
           <div className="flex flex-col items-center">
             <img src={catAvatar} alt={nome} className="w-16 md:w-20 object-contain hover:scale-110 transition-transform" style={{
           height: '120px',
@@ -397,10 +432,6 @@ function CharacterWithBubble({
     <div className="relative" style={{
       animation: 'walk 1s ease-in-out infinite'
     }}>
-          {/* Crown for leader with glow */}
-          {isLeader && <div className="absolute -top-6 md:-top-8 left-1/2 -translate-x-1/2 text-2xl md:text-3xl animate-pulse">
-              👑
-            </div>}
           
           {/* Character body */}
           <div className="w-12 h-16 md:w-16 md:h-20 rounded-t-full border-2 md:border-4 border-[#5a3a1a] relative flex items-center justify-center shadow-xl transition-all hover:scale-110" style={{
