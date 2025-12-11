@@ -13,6 +13,7 @@ import brianAvatar from '@/assets/brian-archer.png';
 import kilsonAvatar from '@/assets/kilson-knight.png';
 import wesleyAvatar from '@/assets/wesley-brawler.png';
 import evertonAvatar from '@/assets/everton-guitarist.png';
+import tonRockAvatar from '@/assets/ton-rock-guitarist.png';
 interface VendedorRace {
   id: string;
   nome: string;
@@ -393,7 +394,7 @@ export default function MedievalRace() {
 }
 
 // Array de avatares disponíveis para seleção aleatória
-const AVAILABLE_AVATARS = [matheusAvatar, guilhermeAvatar, brianAvatar, kilsonAvatar, wesleyAvatar, evertonAvatar];
+const AVAILABLE_AVATARS = [matheusAvatar, guilhermeAvatar, brianAvatar, kilsonAvatar, wesleyAvatar, evertonAvatar, tonRockAvatar];
 
 // Função para selecionar avatar aleatório baseado no ID (determinístico)
 const getRandomAvatar = (vendedorId: string) => {
@@ -442,6 +443,7 @@ function CharacterWithBubble({
   const isKilson = nomeLower.includes('kilson');
   const isWesley = nomeLower.includes('wesley');
   const isEverton = nomeLower.includes('everton');
+  const isTonRock = nomeLower.includes('ton');
 
   // Selecionar avatar: específico ou aleatório
   const selectedAvatar = isMatheus ? matheusAvatar 
@@ -450,6 +452,7 @@ function CharacterWithBubble({
     : isKilson ? kilsonAvatar 
     : isWesley ? wesleyAvatar
     : isEverton ? evertonAvatar
+    : isTonRock ? tonRockAvatar
     : getRandomAvatar(vendedorId);
 
   return (
