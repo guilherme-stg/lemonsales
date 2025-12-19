@@ -65,8 +65,8 @@ export default function RegistrarVenda() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!valorProducao || !valorSetup) {
-      toast.error('Preencha todos os campos');
+    if (!valorProducao && !valorSetup) {
+      toast.error('Preencha pelo menos um valor (Produção ou Setup)');
       return;
     }
 
