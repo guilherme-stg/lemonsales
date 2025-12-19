@@ -49,7 +49,6 @@ export default function RegistrarVenda() {
         .from('profiles')
         .select('id, nome')
         .eq('aprovado', true)
-        .eq('papel', 'VENDEDOR')
         .order('nome');
 
       if (error) throw error;
