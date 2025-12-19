@@ -14,6 +14,7 @@ import kilsonAvatar from '@/assets/kilson-knight.png';
 import wesleyAvatar from '@/assets/wesley-brawler.png';
 import evertonAvatar from '@/assets/everton-guitarist.png';
 import tonRockAvatar from '@/assets/ton-rock-guitarist.png';
+import micaelAvatar from '@/assets/micael-hacker.png';
 interface VendedorRace {
   id: string;
   nome: string;
@@ -444,6 +445,7 @@ function CharacterWithBubble({
   const isWesley = nomeLower.includes('wesley');
   const isEverton = nomeLower.includes('everton');
   const isTonRock = nomeLower.includes('ton');
+  const isMicael = nomeLower.includes('micael');
 
   // Selecionar avatar: específico ou aleatório
   const selectedAvatar = isMatheus ? matheusAvatar 
@@ -453,6 +455,7 @@ function CharacterWithBubble({
     : isWesley ? wesleyAvatar
     : isEverton ? evertonAvatar
     : isTonRock ? tonRockAvatar
+    : isMicael ? micaelAvatar
     : getRandomAvatar(vendedorId);
 
   return (
